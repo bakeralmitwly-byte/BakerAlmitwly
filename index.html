@@ -308,7 +308,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center top;
+            object-position: center 8%;
             filter: contrast(1.1) brightness(0.75) grayscale(0.15);
         }
 
@@ -1071,7 +1071,7 @@
         .project-section.color-active .project-number { transition: color 0.6s ease; }
 
         .hero-image { position: relative; }
-        .hero-photo-main { position: absolute !important; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; filter: contrast(1.12) brightness(0.72) grayscale(0.1); mix-blend-mode: normal; }
+        .hero-photo-main { position: absolute !important; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 8%; filter: contrast(1.12) brightness(0.72) grayscale(0.1); mix-blend-mode: normal; }
         .hero-photo-frame { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(105deg, transparent 58%, rgba(255,255,255,0.015) 58.5%, rgba(255,255,255,0.015) 59.5%, transparent 60%), linear-gradient(105deg, transparent 62%, rgba(255,255,255,0.008) 62.5%, rgba(255,255,255,0.008) 63%, transparent 63.5%); }
         .hero-photo-noise { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0.55; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E"); mix-blend-mode: overlay; }
         
@@ -1336,6 +1336,29 @@
             .lang-toggle {
                 font-size: 0.7rem;
                 padding: 4px 8px;
+            }
+        }
+
+
+        /* ── Film section mobile layout fix ── */
+        @media (max-width: 768px) {
+            .project-section:has(.main-video-wrapper) {
+                display: flex !important;
+                flex-direction: column;
+            }
+            .project-section:has(.main-video-wrapper) .project-header {
+                order: 0;
+            }
+            .project-section:has(.main-video-wrapper) .project-story {
+                order: 1;
+            }
+            .project-section:has(.main-video-wrapper) .main-video-wrapper {
+                order: 2;
+                margin-top: 24px;
+            }
+            .project-section:has(.main-video-wrapper) .bts-grid {
+                order: 3;
+                margin-top: 12px;
             }
         }
 
@@ -2232,9 +2255,8 @@ function toggleLang() {
         touchStartY = isPinned() ? e.touches[0].clientY : null;
     }, { passive: true });
 
-    // On mobile: don't intercept touch — let scroll be natural,
-    // navigation is buttons-only on small screens
-    const isMobile = () => window.innerWidth <= 768;
+    // isMobile check — used throughout
+    const isMobile = () => window.innerWidth <= 768 || ('ontouchstart' in window && window.innerWidth <= 900);
 
     wrapperEl.addEventListener('touchmove', (e) => {
         if (isMobile()) return; // natural scroll on mobile
@@ -2255,8 +2277,8 @@ function toggleLang() {
 
     const upBtn   = document.getElementById('sideStepUp');
     const downBtn = document.getElementById('sideStepDown');
-    if (upBtn)   upBtn.addEventListener('click', () => scrollToStep((activeIdx < 0 ? 0 : activeIdx) - 1));
-    if (downBtn) downBtn.addEventListener('click', () => scrollToStep((activeIdx < 0 ? 0 : activeIdx) + 1));
+    if (upBtn)   upBtn.addEventListener('click', () => scrollToStep((activeIdx < 0 ? 0 : activeIdx) + 1)); // ↑ climbs up
+    if (downBtn) downBtn.addEventListener('click', () => scrollToStep((activeIdx < 0 ? 0 : activeIdx) - 1)); // ↓ goes down
 
     positionClimber(0);
     updateStairs(0);
