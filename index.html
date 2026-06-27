@@ -1318,6 +1318,27 @@
             }
         }
 
+
+        @media (max-width: 480px) {
+            .topbar-name {
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            .topbar {
+                padding: 14px 16px;
+            }
+            .topbar-links {
+                gap: 16px;
+            }
+            .topbar-links a {
+                font-size: 0.75rem;
+            }
+            .lang-toggle {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+        }
+
 </style>
 </head>
 <body>
@@ -2126,6 +2147,9 @@ function toggleLang() {
     }
 
     window.addEventListener('scroll', () => {
+        // Mobile: scroll does nothing — buttons only
+        if (isMobile()) return;
+
         const rect = section.getBoundingClientRect();
         const wh   = window.innerHeight;
 
@@ -2236,6 +2260,12 @@ function toggleLang() {
 
     positionClimber(0);
     updateStairs(0);
+    // Mobile: show step 0 + CTA immediately (no scroll trigger)
+    if (isMobile()) {
+        activeIdx = 0;
+        showStep(0);
+        if (ctaEl) ctaEl.classList.add('visible');
+    }
 })();
 </script>
 
