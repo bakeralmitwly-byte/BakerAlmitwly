@@ -1080,6 +1080,7 @@
             .hero-content { padding: 120px 0 40px 0; order: 2; }
             .hero-image { height: 65vw; order: 1; }
             .hero-image::before { background: linear-gradient(to top, var(--black) 0%, transparent 50%); }
+            .hero-photo-main { object-position: center 30% !important; }
             .project-body { display: contents; }
             .about-grid { grid-template-columns: 1fr; gap: 40px; }
             .bts-grid { grid-template-columns: 1fr; }
@@ -1276,7 +1277,7 @@
         .cv-fallback p { color: var(--text-secondary); font-size: 0.85rem; }
 
 
-        /* ── Mobile: disable sticky scroll staircase ── */
+        /* ── Mobile: disable sticky scroll staircase (buttons drive navigation instead) ── */
         @media (max-width: 768px) {
             .side-stairs-section {
                 height: auto !important;
@@ -1289,10 +1290,6 @@
                 align-items: stretch;
                 padding: 60px 0 40px;
             }
-            /* hide the visual stair scene on mobile — too small */
-            .side-scene-wrap {
-                display: none !important;
-            }
             /* stack content full-width */
             .side-dynamic-content {
                 width: 100% !important;
@@ -1302,7 +1299,10 @@
                 margin: 0 auto !important;
             }
             /* make dots + buttons visible and centered */
-            .side-controls-row {
+            .side-progress-dots {
+                justify-content: center !important;
+            }
+            .side-step-nav {
                 justify-content: center !important;
                 padding: 24px 24px 0 !important;
             }
@@ -2165,8 +2165,8 @@ function toggleLang() {
         });
         const upBtnEl   = document.getElementById('sideStepUp');
         const downBtnEl = document.getElementById('sideStepDown');
-        if (upBtnEl)   upBtnEl.disabled   = idx <= 0;
-        if (downBtnEl) downBtnEl.disabled = idx >= TOTAL - 1;
+        if (upBtnEl)   upBtnEl.disabled   = idx >= TOTAL - 1; // ↑ advances — disable at the last step
+        if (downBtnEl) downBtnEl.disabled = idx <= 0;          // ↓ retreats — disable at the first step
     }
 
     window.addEventListener('scroll', () => {
