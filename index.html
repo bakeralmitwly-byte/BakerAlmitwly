@@ -1275,6 +1275,49 @@
         .cv-fallback-icon svg { width: 80px; height: 80px; color: rgba(255,255,255,0.2); }
         .cv-fallback p { color: var(--text-secondary); font-size: 0.85rem; }
 
+
+        /* ── Mobile: disable sticky scroll staircase ── */
+        @media (max-width: 768px) {
+            .side-stairs-section {
+                height: auto !important;
+            }
+            .side-stairs-wrapper {
+                position: relative !important;
+                height: auto !important;
+                min-height: 100svh;
+                flex-direction: column;
+                align-items: stretch;
+                padding: 60px 0 40px;
+            }
+            /* hide the visual stair scene on mobile — too small */
+            .side-scene-wrap {
+                display: none !important;
+            }
+            /* stack content full-width */
+            .side-dynamic-content {
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 0 24px !important;
+                text-align: right !important;
+                margin: 0 auto !important;
+            }
+            /* make dots + buttons visible and centered */
+            .side-controls-row {
+                justify-content: center !important;
+                padding: 24px 24px 0 !important;
+            }
+            /* bigger tap targets */
+            #sideStepUp, #sideStepDown {
+                width: 52px !important;
+                height: 52px !important;
+            }
+            /* CTA full width */
+            #side-cta {
+                margin: 24px 16px 0 !important;
+                width: calc(100% - 32px) !important;
+            }
+        }
+
 </style>
 </head>
 <body>
@@ -2110,6 +2153,15 @@ function toggleLang() {
 
     function scrollToStep(idx) {
         idx = Math.max(0, Math.min(TOTAL - 1, idx));
+        // On mobile: directly update without scroll animation
+        if (isMobile()) {
+            activeIdx = idx;
+            positionClimber(idx);
+            animateWalk();
+            showStep(idx);
+            updateStairs(idx);
+            return;
+        }
         const wh = window.innerHeight;
         const scrollable = section.getBoundingClientRect().height - wh;
         const targetProgress = (idx + 0.5) / TOTAL;
@@ -2142,14 +2194,13 @@ function toggleLang() {
     const wrapperEl = document.querySelector('.side-stairs-wrapper');
 
     wrapperEl.addEventListener('wheel', (e) => {
-        if (!isPinned()) return;
+        if (isMobile() || !isPinned()) return;
         const dir = e.deltaY > 0 ? 1 : -1;
         const next = (activeIdx < 0 ? 0 : activeIdx) + dir;
         if (next >= 0 && next <= TOTAL - 1) {
             e.preventDefault();
             stepBy(dir);
         }
-        // at the boundary: don't prevent default, so the page scrolls onward naturally
     }, { passive: false });
 
     let touchStartY = null;
@@ -2157,7 +2208,12 @@ function toggleLang() {
         touchStartY = isPinned() ? e.touches[0].clientY : null;
     }, { passive: true });
 
+    // On mobile: don't intercept touch — let scroll be natural,
+    // navigation is buttons-only on small screens
+    const isMobile = () => window.innerWidth <= 768;
+
     wrapperEl.addEventListener('touchmove', (e) => {
+        if (isMobile()) return; // natural scroll on mobile
         if (touchStartY === null || !isPinned()) return;
         const dy = touchStartY - e.touches[0].clientY;
         if (Math.abs(dy) > 32) {
@@ -2168,7 +2224,7 @@ function toggleLang() {
                 stepBy(dir);
                 touchStartY = e.touches[0].clientY;
             } else {
-                touchStartY = null; // release control so the user can swipe past naturally
+                touchStartY = null;
             }
         }
     }, { passive: false });
