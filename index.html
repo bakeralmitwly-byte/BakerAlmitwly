@@ -1244,7 +1244,17 @@
 
         @media (max-width: 768px) {
             .lens-layout { grid-template-columns: 1fr; }
-            .ba-wrap, .ba-portrait { width: 100%; }
+            .ba-wrap {
+                width: 150px;
+                margin: 0 auto 20px;
+                position: sticky;
+                top: 132px;
+                z-index: 6;
+            }
+            .ba-portrait { width: 150px; }
+            .ba-lbl { font-size: 0.46rem; letter-spacing: 1px; padding: 3px 6px; bottom: 8px; }
+            .ba-knob { width: 26px; height: 26px; }
+            .ba-knob svg { width: 13px; height: 13px; }
         }
 
         /* ══════════════════════════════════════
@@ -1795,22 +1805,32 @@
         }
 
 
-        @media (max-width: 480px) {
-            .topbar-name {
-                font-size: 0.8rem;
-                white-space: nowrap;
-            }
+        @media (max-width: 600px) {
             .topbar {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
                 padding: 14px 16px;
             }
+            .topbar-name {
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
             .topbar-links {
-                gap: 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+                width: 100%;
+                gap: 10px 14px;
             }
             .topbar-links a {
-                font-size: 0.75rem;
+                font-size: 0.72rem;
+            }
+            .topbar-shortcut {
+                font-size: 0.68rem !important;
+                padding: 5px 12px;
             }
             .lang-toggle {
-                font-size: 0.7rem;
+                font-size: 0.68rem;
                 padding: 4px 8px;
             }
         }
@@ -2393,7 +2413,7 @@
 <span class="footer-copy" data-i18n="footer-copy">© 2026 بكر المتولي — جميع الحقوق محفوظة.</span>
 <div class="footer-links">
 <a href="mailto:bakeralmitwly@gmail.com">bakeralmitwly@gmail.com</a>
-<a href="https://wa.me/962799112787" target="_blank" data-i18n="footer-whatsapp">whatsapp</a>
+<a href="https://wa.me/962799112787" target="_blank" data-i18n="footer-whatsapp">واتساب</a>
 <a href="https://www.linkedin.com/in/baker-almitwly-89204928b/" target="_blank">LinkedIn</a>
 <a href="https://www.instagram.com/almitwly/" target="_blank">Instagram</a>
 </div>
@@ -2738,7 +2758,7 @@ const T = {
     "end-label": {"ar": "عني", "en": "About"},
     "end-about": {"ar": "لطالما آمنت بمقولة: بالأمس كنت ذكيا فأردت أن أغير العالم, اليوم أنا حكيم ولذلك سأغير نفسي.<br/><br/>في رحلتي بين هندسة البرمجيات وصناعة المحتوى, لا ارى نفسي خبيرا في كل شي, بل ارى نفسي طالبا دائم الفضول. التخصص في مجال واحد امان, لكن التوسع في مجالات مختلفة هو ما يمنحنا زوايا رؤية جديدة ومن هنا ينتج الابداع...", "en": "I've always believed: yesterday I was smart and wanted to change the world. Today I'm wiser, so I'll change myself.<br/><br/>In my journey between software engineering and content production, I don't see myself as an expert in everything — I'm a permanently curious student. Specializing in one field is safe, but expanding into different fields gives you new angles of vision, and that's where creativity comes from."},
     "footer-copy": {"ar": "© 2026 بكر المتولي — جميع الحقوق محفوظة.", "en": "© 2026 Bakr Al-Mitwali. All rights reserved."},
-    "footer-whatsapp": {"ar": "whatsapp", "en": "WhatsApp"},
+    "footer-whatsapp": {"ar": "واتساب", "en": "WhatsApp"},
 
     "process-heading": {"ar": "آلية العمل", "en": "The Workflow"},
     "process-subheading": {"ar": "الفيديو أو الحملة الناجحة مش مجرد لقطات عشوائية، هي هيكلة وتفكير قبل أي شيء. هذه هي الخطوات التي نعتمدها لبناء مشروعك:", "en": "A successful video or campaign isn't just random shots; it's structure and thought before anything else. These are the steps we take to build your project:"},
