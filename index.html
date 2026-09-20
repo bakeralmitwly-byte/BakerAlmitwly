@@ -122,6 +122,21 @@
             color: var(--white);
         }
 
+        .topbar-shortcut {
+            background: var(--white);
+            color: var(--black) !important;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.78rem !important;
+            transition: all 0.2s ease;
+        }
+
+        .topbar-shortcut:hover {
+            background: var(--accent);
+            color: var(--black) !important;
+            transform: translateY(-1px);
+        }
+
         /* ===== HERO ===== */
         .hero {
             min-height: 100vh;
@@ -1000,8 +1015,459 @@
         }
 
         /* ══════════════════════════════════════
-           ANIMATIONS & COLOR OBSERVER
+           LENS PANEL  (BA + colour sidebar)
         ══════════════════════════════════════ */
+        .lens-section {
+            background: var(--black);
+            padding: 100px 0 0;
+        }
+
+        .lens-section-label {
+            font-size: 0.63rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 14px;
+        }
+
+        .lens-layout {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 56px;
+            align-items: start;
+        }
+
+        /* ── Before / After portrait ── */
+        .ba-wrap {
+            position: relative;
+            width: 260px;
+            flex-shrink: 0;
+        }
+
+        .ba-portrait {
+            position: relative;
+            width: 260px;
+            aspect-ratio: 9 / 16;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: ew-resize;
+            user-select: none;
+            box-shadow: 0 32px 64px rgba(0,0,0,0.7);
+        }
+
+        .ba-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            display: block;
+            pointer-events: none;
+        }
+
+        .ba-img-color { z-index: 1; }
+
+        .ba-img-bw {
+            z-index: 2;
+            /* Flat, lifted, desaturated Sony S-Log3 style profile — not a straight B&W */
+            filter: contrast(0.62) brightness(1.32) saturate(0.42) sepia(0.14) hue-rotate(32deg);
+            clip-path: inset(0 0 0 50%);
+        }
+
+        .ba-tint {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            pointer-events: none;
+            mix-blend-mode: color;
+            opacity: 0;
+            background: #1b2a4a;
+            clip-path: inset(0 50% 0 0);
+            transition: opacity 0.5s ease, background-color 0.5s ease, clip-path 0.05s linear;
+        }
+
+        .ba-tint.is-active { opacity: 0.4; }
+
+        .ba-line {
+            position: absolute;
+            top: 0; bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: rgba(255,255,255,0.85);
+            z-index: 10;
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+
+        .ba-knob {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(8,8,8,0.7);
+            backdrop-filter: blur(8px);
+            border: 2px solid rgba(255,255,255,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 11;
+            pointer-events: none;
+        }
+
+        .ba-knob svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+        .ba-labels {
+            position: absolute;
+            inset: 0;
+            z-index: 12;
+            pointer-events: none;
+        }
+
+        .ba-lbl {
+            position: absolute;
+            bottom: 14px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.75);
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(6px);
+            padding: 4px 9px;
+            border-radius: 3px;
+        }
+
+        .ba-lbl-left  { left:  10px; }
+        .ba-lbl-right { right: 10px; }
+
+        /* ── Right panel ── */
+        .lens-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 52px;
+            padding-top: 8px;
+        }
+
+        /* Writing block */
+        .lens-writing { }
+
+        .lens-writing-title {
+            font-size: 0.63rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 20px;
+        }
+
+        .lens-bio {
+            margin-top: 18px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--text-secondary);
+            line-height: 1.85;
+            max-width: 440px;
+            text-wrap: pretty;
+        }
+
+        /* Colour swatches block */
+        .lens-colours { }
+
+        .lens-colours-title {
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        .lens-colours-desc {
+            font-size: 0.92rem;
+            font-weight: 300;
+            color: var(--text-secondary);
+            line-height: 1.85;
+            max-width: 480px;
+            margin-bottom: 24px;
+            text-wrap: pretty;
+        }
+
+        .swatch-deck {
+            display: flex;
+            gap: 0;
+            position: relative;
+            height: 140px;
+        }
+
+        .swatch {
+            width: 90px;
+            height: 130px;
+            border-radius: 6px;
+            position: absolute;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .swatch:nth-child(1) { left: 0px;  top: 0;  transform: rotate(-8deg);  background: #b8722e; z-index: 1; }
+        .swatch:nth-child(2) { left: 60px; top: 6px; transform: rotate(-3deg); background: #5b2e6b; z-index: 2; }
+        .swatch:nth-child(3) { left: 120px;top: 2px; transform: rotate(4deg); background: #7a2323; z-index: 3; }
+        .swatch:nth-child(4) { left: 180px;top: 8px; transform: rotate(8deg); background: #45542f; z-index: 2; }
+        .swatch:nth-child(5) { left: 240px;top: 0;   transform: rotate(-5deg);background: #1b2a4a; z-index: 1; }
+
+        .swatch:hover { transform: rotate(0deg) translateY(-10px) !important; z-index: 10 !important; }
+
+        .swatch.is-selected {
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.85), 0 10px 26px rgba(0,0,0,0.6);
+            transform: rotate(0deg) translateY(-12px) !important;
+            z-index: 11 !important;
+        }
+
+        .swatch-hex {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.55rem;
+            font-family: monospace;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.4);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .lens-layout { grid-template-columns: 1fr; }
+            .ba-wrap, .ba-portrait { width: 100%; }
+        }
+
+        /* ══════════════════════════════════════
+           VIDEO SHOWCASE  — cinematic reel cards
+        ══════════════════════════════════════ */
+        .video-section {
+            background: var(--black);
+            padding: 80px 0 100px;
+        }
+
+        .video-section-header {
+            margin-bottom: 44px;
+        }
+
+        .video-section-label {
+            font-size: 0.63rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+        }
+
+        .video-section-title {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 800;
+            color: var(--white);
+        }
+
+        /* Grid — tight portrait columns */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        /* Card */
+        .vc {
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #080808;
+            aspect-ratio: 9 / 16;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            opacity: 0;
+            transform: translateY(32px) scale(0.95);
+            transition:
+                opacity 0.55s ease,
+                transform 0.55s cubic-bezier(0.16,1,0.3,1),
+                box-shadow 0.3s ease;
+        }
+
+        .vc.in-view {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* Thumbnail fills the whole card */
+        .vc-thumb {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .vc-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            display: block;
+            transition: transform 0.6s cubic-bezier(0.16,1,0.3,1), filter 0.35s ease;
+            filter: brightness(0.78) saturate(0.9);
+        }
+
+        /* Gradient overlay so text is always readable */
+        .vc-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 45%, transparent 70%),
+                linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .vc:hover .vc-thumb img {
+            transform: scale(1.06);
+            filter: brightness(0.6) saturate(1.1);
+        }
+
+        .vc:hover {
+            box-shadow: 0 24px 64px rgba(0,0,0,0.85);
+        }
+
+        /* Film-strip holes decoration top */
+        .vc-strip {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 6px;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .vc-hole {
+            width: 8px;
+            height: 13px;
+            border-radius: 2px;
+            background: rgba(0,0,0,0.55);
+            border: 1px solid rgba(255,255,255,0.12);
+            flex-shrink: 0;
+        }
+
+        /* Big centred play button */
+        .vc-play {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 4;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .vc-play-ring {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s ease, background 0.2s ease;
+            background: rgba(0,0,0,0.25);
+            backdrop-filter: blur(4px);
+        }
+
+        .vc:hover .vc-play-ring {
+            transform: scale(1.22);
+            border-color: #fff;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .vc-play-ring svg {
+            width: 16px;
+            height: 16px;
+            fill: #fff;
+            margin-right: -2px;
+        }
+
+        /* Info pinned to bottom */
+        .vc-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 12px 14px;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .vc-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.3;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .vc-meta {
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.5);
+            font-weight: 500;
+        }
+
+        /* Duration chip */
+        .vc-duration {
+            position: absolute;
+            bottom: 52px;
+            left: 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.8);
+            font-family: monospace;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Inline iframe */
+        .vc-frame {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
+            z-index: 10;
+        }
+
+        .vc.playing .vc-frame { display: block; }
+        .vc.playing .vc-play  { opacity: 0; pointer-events: none; }
+        .vc.playing .vc-strip { display: none; }
+
+        @media (max-width: 1024px) {
+            .video-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        @media (max-width: 640px) {
+            .video-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        }
+
+
         .scroll-bar {
             position: fixed;
             top: 0; left: 0;
@@ -1386,7 +1852,8 @@
 <nav class="topbar">
 <span class="topbar-name" data-i18n="nav-name">بكر المتولي</span>
 <div class="topbar-links">
-<a data-i18n="nav-works" href="#projects">الأعمال</a>
+<a class="topbar-shortcut" data-i18n="nav-latest" href="#videos">آخر الأعمال</a>
+<a data-i18n="nav-works" href="#projects">المشاريع</a>
 <a data-i18n="nav-about" href="#about">عني</a>
 <a data-i18n="nav-contact" href="#contact">التواصل</a>
 <button class="lang-toggle" onclick="toggleLang()">EN</button></div>
@@ -1699,6 +2166,159 @@
 </div></section>
 </div> <!-- End of wrap -->
 
+
+<!-- ══════════ LENS PANEL ══════════ -->
+<section class="lens-section" id="lens" data-color="#000000">
+<div class="wrap">
+    <div class="lens-section-label" data-i18n="lens-label">خلف الكاميرا</div>
+    <div class="lens-layout">
+
+        <!-- Before / After portrait -->
+        <div class="ba-wrap">
+            <div class="ba-portrait" id="baPortrait">
+                <img class="ba-img ba-img-color" src="Images/bts-main.jpg" alt="ملوّن"/>
+                <img class="ba-img ba-img-bw"    src="Images/bts-main.jpg" alt="S-Log3"/>
+                <div class="ba-tint" id="baTint"></div>
+                <div class="ba-line" id="baLine"></div>
+                <div class="ba-knob" id="baKnob">
+                    <svg viewBox="0 0 24 24"><polyline points="10,18 4,12 10,6"/><polyline points="14,6 20,12 14,18"/></svg>
+                </div>
+                <div class="ba-labels">
+                    <span class="ba-lbl ba-lbl-left"  data-i18n="ba-color">ملوّن</span>
+                    <span class="ba-lbl ba-lbl-right" data-i18n="ba-bw">S-Log3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right panel: writing + colours -->
+        <div class="lens-panel">
+
+            <div class="lens-writing">
+                <div class="lens-writing-title" data-i18n="lens-writing-title">عن الأسلوب</div>
+                <p class="lens-bio" data-i18n="lens-bio">اللقطة الحقيقية مش شي بتلقطه، هي شي بتبنيه. من إضاءة محسوبة، لزاوية بتحكي قبل ما حدا يحكي، لحضور بيني وبين الكاميرا بخلي المشهد صادق مش مصطنع.</p>
+            </div>
+
+            <div class="lens-colours">
+                <div class="lens-colours-title" data-i18n="lens-colours-title">لوحة الألوان</div>
+                <p class="lens-colours-desc" data-i18n="lens-colours-desc">ولا لون هون بالصدفة. كل لون مدروس ومختار بعناية، وبعبّر عن إحساس أو حالة مرتبطة بالمشروع نفسه.</p>
+                <div class="swatch-deck" id="swatchDeck">
+                    <div class="swatch" data-tint="#b8722e" style="background:#b8722e"><span class="swatch-hex">#B8722E</span></div>
+                    <div class="swatch" data-tint="#5b2e6b" style="background:#5b2e6b"><span class="swatch-hex">#5B2E6B</span></div>
+                    <div class="swatch" data-tint="#7a2323" style="background:#7a2323"><span class="swatch-hex">#7A2323</span></div>
+                    <div class="swatch" data-tint="#45542f" style="background:#45542f"><span class="swatch-hex">#45542F</span></div>
+                    <div class="swatch swatch-reset" data-reset="true" style="background:#1b2a4a"><span class="swatch-hex">#1B2A4A</span></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- ══════════ VIDEO SHOWCASE ══════════ -->
+<section class="video-section" id="videos" data-color="#000000">
+<div class="wrap">
+    <div class="video-section-header">
+        <div class="video-section-label" data-i18n="video-label">فيديوهات</div>
+        <h2 class="video-section-title" data-i18n="video-title">أعمال مصوّرة</h2>
+    </div>
+    <div class="video-grid" id="videoGrid">
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 1" src="https://i.ytimg.com/vi/3ycvRmooMyQ/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/3ycvRmooMyQ/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/3ycvRmooMyQ?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 2" src="https://i.ytimg.com/vi/J34nUT5V37w/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/J34nUT5V37w/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/J34nUT5V37w?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 3" src="https://i.ytimg.com/vi/gzV2vj7rYC8/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/gzV2vj7rYC8/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/gzV2vj7rYC8?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 4" src="https://i.ytimg.com/vi/VEfb7e8pZIc/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/VEfb7e8pZIc/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/VEfb7e8pZIc?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 5" src="https://i.ytimg.com/vi/8vR41cjJmfE/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/8vR41cjJmfE/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/8vR41cjJmfE?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 6" src="https://i.ytimg.com/vi/ihiTqEuOblQ/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/ihiTqEuOblQ/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/ihiTqEuOblQ?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 7" src="https://i.ytimg.com/vi/s-AGwa62iFE/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/s-AGwa62iFE/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/s-AGwa62iFE?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 8" src="https://i.ytimg.com/vi/TuTroaz4hEo/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/TuTroaz4hEo/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/TuTroaz4hEo?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 9" src="https://i.ytimg.com/vi/aaWVj2HVf8w/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/aaWVj2HVf8w/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/aaWVj2HVf8w?autoplay=1&rel=0"></iframe>
+        </div>
+
+        <div class="vc">
+            <div class="vc-thumb">
+                <img alt="فيديو 10" src="https://i.ytimg.com/vi/9Z5fh9XQaUg/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/9Z5fh9XQaUg/hqdefault.jpg'"/>
+            </div>
+            <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
+            <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/9Z5fh9XQaUg?autoplay=1&rel=0"></iframe>
+        </div>
+
+    </div>
+</div>
+</section>
+<!-- ══════════ /VIDEO SHOWCASE ══════════ -->
+
 <!-- سكشن كيف بشتغل -->
 <section class="side-stairs-section project-section" id="process" data-color="#000000">
     <div class="side-stairs-wrapper">
@@ -1773,9 +2393,9 @@
 <span class="footer-copy" data-i18n="footer-copy">© 2026 بكر المتولي — جميع الحقوق محفوظة.</span>
 <div class="footer-links">
 <a href="mailto:bakeralmitwly@gmail.com">bakeralmitwly@gmail.com</a>
-<a href="https://wa.me/962799112787" target="_blank">واتساب</a>
+<a href="https://wa.me/962799112787" target="_blank" data-i18n="footer-whatsapp">whatsapp</a>
 <a href="https://www.linkedin.com/in/baker-almitwly-89204928b/" target="_blank">LinkedIn</a>
-<a href="https://www.instagram.com/almitwly/ target="_blank">Instagram</a>
+<a href="https://www.instagram.com/almitwly/" target="_blank">Instagram</a>
 </div>
 </footer>
 </div>
@@ -1843,6 +2463,108 @@
   const bar = document.createElement('div');
   bar.className = 'scroll-bar';
   document.body.prepend(bar);
+
+  // ── Before / After slider ──────────────────────────────
+  (function () {
+    const portrait = document.getElementById('baPortrait');
+    const bwImg    = portrait?.querySelector('.ba-img-bw');
+    const tintEl   = document.getElementById('baTint');
+    const line     = document.getElementById('baLine');
+    const knob     = document.getElementById('baKnob');
+    if (!portrait || !bwImg) return;
+
+    function setPos(clientX) {
+      const r   = portrait.getBoundingClientRect();
+      let pct   = Math.max(2, Math.min(98, ((clientX - r.left) / r.width) * 100));
+      bwImg.style.clipPath = `inset(0 0 0 ${pct}%)`;
+      if (tintEl) tintEl.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+      line.style.left      = pct + '%';
+      knob.style.left      = pct + '%';
+      knob.style.transform = 'translate(-50%, -50%)';
+      knob.style.top       = '50%';
+    }
+
+    // Init at 50%
+    setPos(portrait.getBoundingClientRect().left + portrait.getBoundingClientRect().width * 0.5);
+
+    let dragging = false;
+    portrait.addEventListener('mousedown',  (e) => { dragging = true; setPos(e.clientX); });
+    window.addEventListener ('mouseup',     ()  => { dragging = false; });
+    window.addEventListener ('mousemove',   (e) => { if (dragging) setPos(e.clientX); });
+    portrait.addEventListener('touchstart', (e) => { dragging = true;  setPos(e.touches[0].clientX); }, { passive: true });
+    portrait.addEventListener('touchmove',  (e) => { if (dragging) setPos(e.touches[0].clientX); },   { passive: true });
+    portrait.addEventListener('touchend',   ()  => { dragging = false; });
+  })();
+
+  // ── Colour swatches → tint the portrait image ──────────
+  (function () {
+    const deck    = document.getElementById('swatchDeck');
+    const tint    = document.getElementById('baTint');
+    if (!deck || !tint) return;
+
+    const swatches = Array.from(deck.querySelectorAll('.swatch'));
+
+    swatches.forEach((sw) => {
+      sw.addEventListener('click', () => {
+        swatches.forEach(s => s.classList.remove('is-selected'));
+
+        if (sw.dataset.reset === 'true') {
+          // This is his own signature colour — clicking it returns the image to his original edit
+          tint.classList.remove('is-active');
+          return;
+        }
+
+        sw.classList.add('is-selected');
+        tint.style.background = sw.dataset.tint;
+        tint.classList.add('is-active');
+      });
+    });
+  })();
+
+  // ── Lens section reveal ────────────────────────────────
+  (function () {
+    const lensSection = document.querySelector('.lens-section');
+    if (!lensSection) return;
+    const lensObs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { lensSection.classList.add('in-view'); lensObs.disconnect(); }
+    }, { threshold: 0.15 });
+    lensObs.observe(lensSection);
+  })();
+
+  // ── Video cards ────────────────────────────────────────
+  (function () {
+    const cards = Array.from(document.querySelectorAll('.vc'));
+
+    const vcObs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('in-view'), i * 65);
+          vcObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.04 });
+    cards.forEach(c => vcObs.observe(c));
+
+    function stopAllBut(except) {
+      cards.forEach(c => {
+        if (c === except) return;
+        if (c.classList.contains('playing')) {
+          c.classList.remove('playing');
+          const fr = c.querySelector('.vc-frame');
+          if (fr) fr.src = '';
+        }
+      });
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (card.classList.contains('playing')) return;
+        stopAllBut(card);
+        const fr = card.querySelector('.vc-frame');
+        if (fr && fr.dataset.src) { fr.src = fr.dataset.src; card.classList.add('playing'); }
+      });
+    });
+  })();
 
   window.addEventListener('load', () => { document.querySelector('.hero')?.classList.add('hero-loaded'); });
 
@@ -1923,7 +2645,17 @@ const T = {
     "desktop-note": {"ar": "يُفضل تصفح الموقع على الكمبيوتر لتجربة بصرية أفضل", "en": "Best viewed on a desktop for the full visual experience"},
     "btn-cv": {"ar": "تحميل السيرة الذاتية", "en": "Download CV"},
     "logo-strip-more": {"ar": "والعديد من العملاء الآخرين", "en": "and many other clients"},
-    "nav-works": {"ar": "الأعمال", "en": "Work"},
+    "nav-works": {"ar": "المشاريع", "en": "Projects"},
+    "nav-latest": {"ar": "آخر الأعمال", "en": "Latest Work"},
+    "lens-label":           {"ar": "خلف الكاميرا",     "en": "Behind the Lens"},
+    "ba-color":             {"ar": "ملوّن",             "en": "Color"},
+    "ba-bw":                {"ar": "S-Log3",             "en": "S-Log3"},
+    "lens-writing-title":   {"ar": "عن الأسلوب",        "en": "On Style"},
+    "lens-bio":             {"ar": "اللقطة الحقيقية مش شي بتلقطه، هي شي بتبنيه. من إضاءة محسوبة، لزاوية بتحكي قبل ما حدا يحكي، لحضور بيني وبين الكاميرا بخلي المشهد صادق مش مصطنع.", "en": "The real shot isn't something you capture — it's something you build. Calculated lighting, an angle that speaks before anyone does, and a presence between me and the camera that keeps the scene honest, not staged."},
+    "lens-colours-title":   {"ar": "لوحة الألوان",      "en": "Colour Palette"},
+    "lens-colours-desc":    {"ar": "ولا لون هون بالصدفة. كل لون مدروس ومختار بعناية، وبعبّر عن إحساس أو حالة مرتبطة بالمشروع نفسه.", "en": "No color here is accidental. Every shade is deliberate — chosen to carry a feeling tied to the project itself."},
+    "video-label":          {"ar": "فيديوهات",          "en": "Videos"},
+    "video-title":          {"ar": "أعمال مصوّرة",      "en": "Visual Work"},
     "nav-about": {"ar": "عني", "en": "About"},
     "nav-contact": {"ar": "التواصل", "en": "Contact"},
     "hero-label": {"ar": "سجل الأعمال — ٢٠٢٦", "en": "Portfolio — 2026"},
@@ -2006,6 +2738,7 @@ const T = {
     "end-label": {"ar": "عني", "en": "About"},
     "end-about": {"ar": "لطالما آمنت بمقولة: بالأمس كنت ذكيا فأردت أن أغير العالم, اليوم أنا حكيم ولذلك سأغير نفسي.<br/><br/>في رحلتي بين هندسة البرمجيات وصناعة المحتوى, لا ارى نفسي خبيرا في كل شي, بل ارى نفسي طالبا دائم الفضول. التخصص في مجال واحد امان, لكن التوسع في مجالات مختلفة هو ما يمنحنا زوايا رؤية جديدة ومن هنا ينتج الابداع...", "en": "I've always believed: yesterday I was smart and wanted to change the world. Today I'm wiser, so I'll change myself.<br/><br/>In my journey between software engineering and content production, I don't see myself as an expert in everything — I'm a permanently curious student. Specializing in one field is safe, but expanding into different fields gives you new angles of vision, and that's where creativity comes from."},
     "footer-copy": {"ar": "© 2026 بكر المتولي — جميع الحقوق محفوظة.", "en": "© 2026 Bakr Al-Mitwali. All rights reserved."},
+    "footer-whatsapp": {"ar": "whatsapp", "en": "WhatsApp"},
 
     "process-heading": {"ar": "آلية العمل", "en": "The Workflow"},
     "process-subheading": {"ar": "الفيديو أو الحملة الناجحة مش مجرد لقطات عشوائية، هي هيكلة وتفكير قبل أي شيء. هذه هي الخطوات التي نعتمدها لبناء مشروعك:", "en": "A successful video or campaign isn't just random shots; it's structure and thought before anything else. These are the steps we take to build your project:"},
