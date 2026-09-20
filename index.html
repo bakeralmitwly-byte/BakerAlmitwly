@@ -1197,6 +1197,14 @@
             text-wrap: pretty;
         }
 
+        .lens-colours-hint {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 0.5px;
+            margin-bottom: 18px;
+        }
+
         .swatch-deck {
             display: flex;
             gap: 0;
@@ -1244,17 +1252,65 @@
 
         @media (max-width: 768px) {
             .lens-layout { grid-template-columns: 1fr; }
+
             .ba-wrap {
+                position: relative;
                 width: 150px;
+                height: 267px; /* reserves the space so nothing jumps when the portrait goes fixed/docked */
                 margin: 0 auto 20px;
-                position: sticky;
-                top: 132px;
-                z-index: 6;
+                transition: height 0.35s ease, margin 0.35s ease;
             }
-            .ba-portrait { width: 150px; }
+
+            .ba-wrap.ba-wrap--collapsed {
+                height: 0;
+                margin: 0;
+                overflow: hidden;
+            }
+
+            .ba-portrait {
+                width: 150px;
+                transition: width 0.35s ease, height 0.35s ease, transform 0.35s ease, top 0.35s ease, left 0.35s ease, border-radius 0.35s ease;
+            }
+
+            .ba-portrait.ba-fixed {
+                position: fixed;
+                top: 132px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 20;
+            }
+
+            .ba-portrait.ba-docked {
+                position: static;
+                width: 90px;
+                height: 130px;
+                margin: 0 6px;
+                border-radius: 6px;
+                transform: rotate(-6deg);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+            }
+
+            .ba-portrait.ba-docked .ba-labels,
+            .ba-portrait.ba-docked .ba-knob,
+            .ba-portrait.ba-docked .ba-line { display: none; }
+
             .ba-lbl { font-size: 0.46rem; letter-spacing: 1px; padding: 3px 6px; bottom: 8px; }
             .ba-knob { width: 26px; height: 26px; }
             .ba-knob svg { width: 13px; height: 13px; }
+
+            /* When the preview docks into the swatch row, let the deck flow instead of using fixed absolute offsets */
+            .swatch-deck.has-docked-preview {
+                display: flex;
+                align-items: flex-end;
+                flex-wrap: wrap;
+                height: auto;
+                gap: 10px 4px;
+                padding-top: 6px;
+            }
+            .swatch-deck.has-docked-preview .swatch {
+                position: static;
+                transform: none !important;
+            }
         }
 
         /* ══════════════════════════════════════
@@ -1565,8 +1621,9 @@
             .hero { grid-template-columns: 1fr; min-height: auto; }
             .hero-content { padding: 120px 0 40px 0; order: 2; }
             .hero-image { height: 65vw; order: 1; }
-            .hero-image::before { background: linear-gradient(to top, var(--black) 0%, transparent 50%); }
-            .hero-photo-main { object-position: center 30% !important; }
+            .hero-image::before { background: linear-gradient(to top, var(--black) 0%, transparent 28%); }
+            .hero-image::after  { height: 70px; }
+            .hero-photo-main { object-position: center 30% !important; filter: contrast(1.05) brightness(0.98) grayscale(0.1) !important; }
             .project-body { display: contents; }
             .about-grid { grid-template-columns: 1fr; gap: 40px; }
             .bts-grid { grid-template-columns: 1fr; }
@@ -2191,10 +2248,10 @@
 <section class="lens-section" id="lens" data-color="#000000">
 <div class="wrap">
     <div class="lens-section-label" data-i18n="lens-label">خلف الكاميرا</div>
-    <div class="lens-layout">
+    <div class="lens-layout" id="lensLayout">
 
         <!-- Before / After portrait -->
-        <div class="ba-wrap">
+        <div class="ba-wrap" id="baWrap">
             <div class="ba-portrait" id="baPortrait">
                 <img class="ba-img ba-img-color" src="Images/bts-main.jpg" alt="ملوّن"/>
                 <img class="ba-img ba-img-bw"    src="Images/bts-main.jpg" alt="S-Log3"/>
@@ -2221,6 +2278,7 @@
             <div class="lens-colours">
                 <div class="lens-colours-title" data-i18n="lens-colours-title">لوحة الألوان</div>
                 <p class="lens-colours-desc" data-i18n="lens-colours-desc">ولا لون هون بالصدفة. كل لون مدروس ومختار بعناية، وبعبّر عن إحساس أو حالة مرتبطة بالمشروع نفسه.</p>
+                <p class="lens-colours-hint" id="lensColoursHint" data-i18n="lens-colours-hint">جرّب بنفسك — شوف كيف كل لون بيفرق</p>
                 <div class="swatch-deck" id="swatchDeck">
                     <div class="swatch" data-tint="#b8722e" style="background:#b8722e"><span class="swatch-hex">#B8722E</span></div>
                     <div class="swatch" data-tint="#5b2e6b" style="background:#5b2e6b"><span class="swatch-hex">#5B2E6B</span></div>
@@ -2541,6 +2599,71 @@
     });
   })();
 
+  // ── Mobile: portrait follows while reading, then docks into the swatch row ──
+  (function () {
+    const wrap     = document.getElementById('baWrap');
+    const portrait = document.getElementById('baPortrait');
+    const deck     = document.getElementById('swatchDeck');
+    if (!wrap || !portrait || !deck) return;
+
+    const FIXED_TOP = 132;
+    let state = 'initial';
+    let ticking = false;
+
+    function apply(next) {
+      if (next === state) return;
+      state = next;
+
+      if (next === 'fixed') {
+        if (portrait.parentElement !== wrap) wrap.appendChild(portrait);
+        deck.classList.remove('has-docked-preview');
+        portrait.classList.remove('ba-docked');
+        portrait.classList.add('ba-fixed');
+        wrap.classList.remove('ba-wrap--collapsed');
+      } else if (next === 'docked') {
+        if (portrait.parentElement !== deck) deck.insertBefore(portrait, deck.firstChild);
+        deck.classList.add('has-docked-preview');
+        portrait.classList.remove('ba-fixed');
+        portrait.classList.add('ba-docked');
+        wrap.classList.add('ba-wrap--collapsed');
+      } else { // initial
+        if (portrait.parentElement !== wrap) wrap.appendChild(portrait);
+        deck.classList.remove('has-docked-preview');
+        portrait.classList.remove('ba-fixed', 'ba-docked');
+        wrap.classList.remove('ba-wrap--collapsed');
+      }
+    }
+
+    function evaluate() {
+      ticking = false;
+      if (!window.matchMedia('(max-width: 768px)').matches) {
+        apply('initial');
+        return;
+      }
+      const wrapTop = wrap.getBoundingClientRect().top;
+      const deckTop = deck.getBoundingClientRect().top;
+
+      if (deckTop <= FIXED_TOP + 40) {
+        apply('docked');
+      } else if (wrapTop <= FIXED_TOP) {
+        apply('fixed');
+      } else {
+        apply('initial');
+      }
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(evaluate);
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    evaluate();
+  })();
+
   // ── Lens section reveal ────────────────────────────────
   (function () {
     const lensSection = document.querySelector('.lens-section');
@@ -2674,6 +2797,7 @@ const T = {
     "lens-bio":             {"ar": "اللقطة الحقيقية مش شي بتلقطه، هي شي بتبنيه. من إضاءة محسوبة، لزاوية بتحكي قبل ما حدا يحكي، لحضور بيني وبين الكاميرا بخلي المشهد صادق مش مصطنع.", "en": "The real shot isn't something you capture — it's something you build. Calculated lighting, an angle that speaks before anyone does, and a presence between me and the camera that keeps the scene honest, not staged."},
     "lens-colours-title":   {"ar": "لوحة الألوان",      "en": "Colour Palette"},
     "lens-colours-desc":    {"ar": "ولا لون هون بالصدفة. كل لون مدروس ومختار بعناية، وبعبّر عن إحساس أو حالة مرتبطة بالمشروع نفسه.", "en": "No color here is accidental. Every shade is deliberate — chosen to carry a feeling tied to the project itself."},
+    "lens-colours-hint":    {"ar": "جرّب بنفسك — شوف كيف كل لون بيفرق", "en": "Try it yourself — see how every color changes the feel."},
     "video-label":          {"ar": "فيديوهات",          "en": "Videos"},
     "video-title":          {"ar": "أعمال مصوّرة",      "en": "Visual Work"},
     "nav-about": {"ar": "عني", "en": "About"},
