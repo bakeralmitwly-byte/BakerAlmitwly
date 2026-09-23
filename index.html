@@ -26,7 +26,7 @@
             --border-light: #2a2a2a;
             --text-primary: #f0f0f0;
             --text-secondary: #888888;
-            --text-dim: #444444;
+            --text-dim: rgba(255, 255, 255, 0.34);
             --accent: #c8c8c8;
             --white: #ffffff;
         }
@@ -1563,9 +1563,10 @@
         
         @media (max-width: 900px) {
             .hero { grid-template-columns: 1fr; min-height: auto; }
-            .hero-content { padding: 120px 0 40px 0; order: 2; }
-            .hero-image { height: 65vw; order: 1; }
+            .hero-content { padding: 28px 0 40px 0; order: 2; }
+            .hero-image { height: 65vw; order: 1; margin-top: var(--topbar-h, 90px); }
             .hero-image::before { background: linear-gradient(to top, var(--black) 0%, transparent 50%); }
+            .hero-image::after { height: 18%; } /* was a fixed 200px, which blacked out most of the shorter mobile photo */
             .hero-photo-main { object-position: center 30% !important; }
             .project-body { display: contents; }
             .about-grid { grid-template-columns: 1fr; gap: 40px; }
@@ -2246,7 +2247,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 1" src="https://i.ytimg.com/vi/3ycvRmooMyQ/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/3ycvRmooMyQ/hqdefault.jpg'"/>
+                <img alt="فيديو 1" data-vid="3ycvRmooMyQ" src="https://i.ytimg.com/vi/3ycvRmooMyQ/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2255,7 +2256,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 2" src="https://i.ytimg.com/vi/J34nUT5V37w/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/J34nUT5V37w/hqdefault.jpg'"/>
+                <img alt="فيديو 2" data-vid="J34nUT5V37w" src="https://i.ytimg.com/vi/J34nUT5V37w/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2264,7 +2265,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 3" src="https://i.ytimg.com/vi/gzV2vj7rYC8/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/gzV2vj7rYC8/hqdefault.jpg'"/>
+                <img alt="فيديو 3" data-vid="gzV2vj7rYC8" src="https://i.ytimg.com/vi/gzV2vj7rYC8/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2273,7 +2274,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 4" src="https://i.ytimg.com/vi/VEfb7e8pZIc/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/VEfb7e8pZIc/hqdefault.jpg'"/>
+                <img alt="فيديو 4" data-vid="VEfb7e8pZIc" src="https://i.ytimg.com/vi/VEfb7e8pZIc/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2282,7 +2283,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 5" src="https://i.ytimg.com/vi/8vR41cjJmfE/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/8vR41cjJmfE/hqdefault.jpg'"/>
+                <img alt="فيديو 5" data-vid="8vR41cjJmfE" src="https://i.ytimg.com/vi/8vR41cjJmfE/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2291,7 +2292,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 6" src="https://i.ytimg.com/vi/ihiTqEuOblQ/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/ihiTqEuOblQ/hqdefault.jpg'"/>
+                <img alt="فيديو 6" data-vid="ihiTqEuOblQ" src="https://i.ytimg.com/vi/ihiTqEuOblQ/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2300,7 +2301,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 7" src="https://i.ytimg.com/vi/s-AGwa62iFE/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/s-AGwa62iFE/hqdefault.jpg'"/>
+                <img alt="فيديو 7" data-vid="s-AGwa62iFE" src="https://i.ytimg.com/vi/s-AGwa62iFE/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2309,7 +2310,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 8" src="https://i.ytimg.com/vi/TuTroaz4hEo/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/TuTroaz4hEo/hqdefault.jpg'"/>
+                <img alt="فيديو 8" data-vid="TuTroaz4hEo" src="https://i.ytimg.com/vi/TuTroaz4hEo/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2318,7 +2319,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 9" src="https://i.ytimg.com/vi/aaWVj2HVf8w/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/aaWVj2HVf8w/hqdefault.jpg'"/>
+                <img alt="فيديو 9" data-vid="aaWVj2HVf8w" src="https://i.ytimg.com/vi/aaWVj2HVf8w/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2327,7 +2328,7 @@
 
         <div class="vc">
             <div class="vc-thumb">
-                <img alt="فيديو 10" src="https://i.ytimg.com/vi/9Z5fh9XQaUg/maxresdefault.jpg" onerror="this.src='https://i.ytimg.com/vi/9Z5fh9XQaUg/hqdefault.jpg'"/>
+                <img alt="فيديو 10" data-vid="9Z5fh9XQaUg" src="https://i.ytimg.com/vi/9Z5fh9XQaUg/oar2.jpg" onerror="ytThumbFallback(this)" onload="ytThumbCheck(this)"/>
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
@@ -2421,6 +2422,30 @@
 </div>
 </div>
 
+<script>
+// YouTube doesn't 404 when a video (esp. Shorts, which are vertical and often
+// have no maxresdefault) lacks a given thumbnail size — it silently returns a
+// tiny 120x90 grey placeholder instead. onerror alone can't catch that, so we
+// also check the loaded image's real size and keep stepping down the chain
+// of available thumbnail sizes until we land on a real image.
+function ytThumbFallback(img) {
+  // oar2 is YouTube's true vertical (9:16) crop, used for Shorts — it fills
+  // our portrait cards with no grey letterboxing. maxresdefault/hqdefault etc.
+  // are horizontal 16:9 and get pillarboxed with grey bars for Shorts, which
+  // is the washed-out grey card we were seeing. oar2 only exists for Shorts,
+  // so regular videos fall through it via onerror straight to maxresdefault.
+  const chain = ['maxresdefault', 'sddefault', 'hqdefault', 'mqdefault', 'default'];
+  const step = (parseInt(img.dataset.ytStep || '0', 10));
+  if (step >= chain.length) return;
+  img.dataset.ytStep = step + 1;
+  img.src = `https://i.ytimg.com/vi/${img.dataset.vid}/${chain[step]}.jpg`;
+}
+function ytThumbCheck(img) {
+  if (img.naturalWidth <= 120 && img.naturalHeight <= 90) {
+    ytThumbFallback(img);
+  }
+}
+</script>
 <script>
 (function() {
   const BG_BLACK = '#000000';
@@ -2587,6 +2612,16 @@
   })();
 
   window.addEventListener('load', () => { document.querySelector('.hero')?.classList.add('hero-loaded'); });
+
+  // Keep the mobile hero photo clear of the fixed topbar, whatever height it wraps to
+  function syncTopbarOffset() {
+    const topbar = document.querySelector('.topbar');
+    if (!topbar) return;
+    document.documentElement.style.setProperty('--topbar-h', topbar.offsetHeight + 'px');
+  }
+  window.addEventListener('load', syncTopbarOffset);
+  window.addEventListener('resize', syncTopbarOffset);
+  syncTopbarOffset();
 
   // Mobile "best viewed on desktop" toast
   const deviceToast = document.getElementById('deviceToast');
