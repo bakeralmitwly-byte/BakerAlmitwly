@@ -1860,6 +1860,78 @@
         }
 
 </style>
+<style id="chStyle">
+/* ===== HIDDEN CHARTER (secret) ===== */
+.topbar-name{cursor:inherit;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.ch-overlay{position:fixed;inset:0;z-index:10000;background:var(--black);color:var(--text-primary);font-family:'Cairo',sans-serif;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
+.ch-overlay.open{display:block}
+.ch-close{position:fixed;top:16px;left:16px;z-index:2;width:36px;height:36px;background:rgba(5,5,5,.7);border:1px solid rgba(255,255,255,.1);border-radius:50%;cursor:pointer;color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font:inherit;font-size:20px;line-height:1;transition:color .2s,border-color .2s}
+.ch-close:hover{color:var(--white);border-color:rgba(255,255,255,.4)}
+.ch-gate{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+.ch-label{display:block;font-size:.75rem;font-weight:600;color:var(--text-dim);letter-spacing:3px;text-transform:uppercase;margin-bottom:18px}
+.ch-gate .ch-label{letter-spacing:0}
+.ch-gate input{width:200px;text-align:center;letter-spacing:10px;font-size:1.4rem;direction:ltr}
+.ch-gate .ch-btn{margin-top:14px;width:200px}
+.ch-gate.err input{border-color:#b44;animation:chshake .35s}
+@keyframes chshake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.ch-wrap{max-width:780px;margin:0 auto;padding:72px 20px 80px}
+.ch-wrap h1.ch-h{font-size:clamp(2rem,5vw,3rem);font-weight:900;line-height:1.1;margin-bottom:8px}
+.ch-sub{color:var(--text-secondary);margin-bottom:28px;font-size:.95rem}
+.ch-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px;margin-bottom:14px}
+.ch-card h2{font-size:.85rem;font-weight:700;color:var(--text-secondary);margin-bottom:14px}
+.ch-g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ch-full{grid-column:1/-1}
+@media(max-width:560px){.ch-g{grid-template-columns:1fr}}
+.ch-overlay label{display:block;font-size:.82rem;color:var(--text-secondary);margin-bottom:4px;font-weight:600}
+.ch-overlay input,.ch-overlay select{width:100%;font:inherit;font-size:.92rem;color:var(--text-primary);background:var(--deep);border:1px solid var(--border-light);border-radius:2px;padding:0 11px;height:40px}
+.ch-overlay input:focus,.ch-overlay select:focus{outline:none;border-color:var(--white)}
+.ch-overlay select option{background:#111;color:#f0f0f0}
+.ch-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.ch-row>*{flex:1}.ch-row>.s{flex:0 0 100px}
+.ch-chk{display:flex!important;gap:8px;align-items:center;margin:0!important;color:var(--text-primary)!important}
+.ch-chk input{width:auto}
+.ch-btn{font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;border-radius:2px;padding:10px 20px;background:var(--white);color:var(--black);border:1px solid var(--white);transition:all .2s}
+.ch-btn:hover{background:transparent;color:var(--white)}
+.ch-btn.o{background:transparent;color:var(--text-secondary);border-color:var(--border-light)}
+.ch-btn.o:hover{border-color:var(--text-secondary);color:var(--white)}
+.ch-acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.ch-pad{width:100%;max-width:320px;height:110px;background:#fff;border:1px dashed #666;border-radius:2px;touch-action:none;display:block}
+.ch-hint{font-size:.78rem;color:var(--text-dim);margin-top:6px}
+.ch-prev{font-size:.85rem;font-weight:700;color:var(--text-secondary);margin:28px 0 12px}
+#ch-doc{background:#fff;color:#111;border-radius:2px;padding:36px 32px;font-family:'Cairo',sans-serif;line-height:1.75}
+#ch-doc h1{font-size:1.9rem;font-weight:900;text-align:center;margin:0 0 4px;color:#000}
+#ch-doc .in{color:#555;margin:0 0 20px;text-align:center;font-size:.92rem;padding-bottom:16px;border-bottom:1px solid #000}
+#ch-doc .cl{break-inside:avoid}
+#ch-doc h3{font-size:1rem;font-weight:700;margin:16px 0 2px;color:#000}
+#ch-doc p{margin:0;white-space:pre-line;font-size:.92rem;color:#222}
+.ch-sg{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px;padding-top:14px;border-top:1px solid #000;break-inside:avoid}
+.ch-sg div{min-height:96px;font-size:.9rem}.ch-sg b{display:block;font-size:.95rem}
+.ch-hide{display:none!important}
+@media print{
+  @page{margin:14mm}
+  html,body{background:#fff!important;overflow:visible!important;height:auto!important}
+  body::before{display:none!important}
+  body>*:not(#chOverlay){display:none!important}
+  #chOverlay{position:static!important;display:block!important;overflow:visible!important;background:#fff!important;inset:auto}
+  .ch-noprint,.ch-close,.ch-gate{display:none!important}
+  .ch-wrap{padding:0;max-width:none}
+  #ch-doc{padding:0;border-radius:0}
+  #ch-doc h3{break-after:avoid;margin-top:9px;font-size:.92rem}
+  #ch-doc h1{font-size:1.5rem}
+  #ch-doc p{font-size:.8rem;line-height:1.6}
+  #ch-doc .in{margin-bottom:10px;padding-bottom:10px;font-size:.82rem}
+  .ch-sg{margin-top:16px;padding-top:10px}.ch-sg div{min-height:70px;font-size:.82rem}
+}
+
+.ch-file{display:inline-flex;align-items:center;cursor:pointer;margin:0}
+.ch-overlay input[type=number]{-moz-appearance:textfield}
+.ch-overlay input[type=checkbox]{height:auto;width:auto}
+.ch-sec{font-size:.82rem;font-weight:700;color:var(--white);margin:22px 0 12px;padding-top:16px;border-top:1px solid var(--border)}.ch-sec0{margin-top:14px}
+.ch-line{border:1px solid var(--border);border-radius:2px;padding:12px;margin-bottom:10px;background:var(--deep)}
+.ch-line .ch-row{margin-bottom:0}
+.ch-g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+@media(max-width:560px){.ch-g3{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 <!-- Mobile viewing notice -->
@@ -3170,5 +3242,366 @@ document.addEventListener('keydown', e => {
 });
 </script>
 
+<!-- Hidden charter (opens by clicking the name 5 times + password) -->
+<div class="ch-overlay" id="chOverlay" dir="rtl" lang="ar" aria-hidden="true">
+  <button class="ch-close" id="chClose" aria-label="إغلاق">×</button>
+  <div class="ch-gate" id="chGate">
+    <span class="ch-label">منطقة خاصة</span>
+    <input id="chPw" type="password" inputmode="numeric" autocomplete="off" maxlength="12" aria-label="كلمة المرور">
+    <button class="ch-btn" id="chGo" type="button">دخول</button>
+  </div>
+  <div class="ch-hide" id="chApp"></div>
+</div>
+<script>
+(function(){
+const OV=document.getElementById('chOverlay'),GATE=document.getElementById('chGate'),APP=document.getElementById('chApp'),PW=document.getElementById('chPw');
+const ROOT=APP,PASS='0799';
+let ready=false,savedTitle=document.title;
+const nameEl=document.querySelector('.topbar-name');
+let cnt=0,tmr=null;
+if(nameEl)nameEl.addEventListener('click',()=>{cnt++;clearTimeout(tmr);tmr=setTimeout(()=>{cnt=0},1500);if(cnt>=5){cnt=0;clearTimeout(tmr);openGate()}});
+function openGate(){OV.classList.add('open');OV.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';GATE.classList.remove('ch-hide','err');APP.classList.add('ch-hide');PW.value='';OV.scrollTop=0;setTimeout(()=>PW.focus(),50)}
+function lock(){OV.classList.remove('open');OV.setAttribute('aria-hidden','true');document.body.style.overflow='';APP.classList.add('ch-hide');PW.value='';if(ready){S.sigC='';const c=$('padC');c.getContext('2d').clearRect(0,0,c.width,c.height);render(S)}}
+function tryPw(){if(PW.value===PASS){GATE.classList.add('ch-hide');APP.classList.remove('ch-hide');OV.scrollTop=0;if(!ready){APP.innerHTML=BUILDER_HTML;builder();ready=true}}else{GATE.classList.remove('err');void GATE.offsetWidth;GATE.classList.add('err');PW.value='';PW.focus()}}
+document.getElementById('chGo').onclick=tryPw;
+PW.addEventListener('keydown',e=>{if(e.key==='Enter')tryPw()});
+document.getElementById('chClose').onclick=lock;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&OV.classList.contains('open'))lock()});
+function doPrint(){const n=(S.cl||'').trim();document.title=T(S.lang==='ar','عقد تقديم خدمات','Service Contract')+(n?' - '+n:'');window.print()}
+window.addEventListener('afterprint',()=>{document.title=savedTitle});
+const BUILDER_HTML="\n<div class=\"ch-wrap\">\n<div class=\"ch-noprint\">\n<span class=\"ch-label\">Service Contract</span>\n<h1 class=\"ch-h\">العقد</h1>\n<p class=\"ch-sub\">عبّي الخيارات، شوف العقد يتحدّث قدامك، وبعدين اطبعه أو نزّله PDF.</p>\n\n<div class=\"ch-card\"><h2>الأطراف</h2><div class=\"ch-g\">\n<div><label>لغة العقد</label><select data-k=\"lang\"><option value=\"ar\">عربي</option><option value=\"en\">English</option></select></div>\n<div><label>نوع الخدمة</label><select data-k=\"svc\"><option value=\"edit\">مونتاج</option><option value=\"shoot\">تصوير</option><option value=\"both\">تصوير ومونتاج</option><option value=\"ai\">فيديو بالذكاء الاصطناعي</option></select></div>\n<div><label>اسمك / اسم شركتك</label><input data-k=\"me\"></div>\n<div><label>اسم العميل</label><input data-k=\"cl\"></div>\n<div><label>رقمك الوطني / السجل التجاري (اختياري)</label><input data-k=\"meId\" inputmode=\"numeric\"></div>\n<div><label>الرقم الوطني / السجل التجاري للعميل (اختياري)</label><input data-k=\"clId\" inputmode=\"numeric\"></div>\n<div><label>رقم هاتفك (اختياري)</label><input data-k=\"mePhone\" inputmode=\"tel\" dir=\"ltr\"></div>\n<div><label>رقم هاتف العميل (اختياري)</label><input data-k=\"clPhone\" inputmode=\"tel\" dir=\"ltr\"></div>\n<div class=\"ch-full\"><label>التاريخ</label><input type=\"date\" data-k=\"date\"></div>\n</div><p class=\"ch-hint\">الأرقام الوطنية والهواتف اختيارية: إذا ما كتبتها ما بتظهر بالعقد.</p></div>\n\n<div class=\"ch-card\"><h2>الشغل والسعر</h2>\n<p class=\"ch-hint\" style=\"margin:0 0 4px\">كل شي مرتب بالتسلسل: شو الفيديوهات وسعرها، بعدها الدفع، بعدها التسليم والتعديلات، وأخيراً النشر.</p>\n\n<div class=\"ch-sec ch-sec0\">١. الفيديوهات وسعرها</div>\n<div class=\"ch-g\">\n<div><label>نوع التعاون</label><select data-k=\"mode\"><option value=\"once\">مرة واحدة فقط</option><option value=\"monthly\">شهري (بيتجدد كل شهر)</option></select></div>\n<div><label>طريقة التسعير</label><select data-k=\"pm\"><option value=\"single\">سعر واحد للفيديوهات</option><option value=\"campaign\">حملة (أكثر من نوع فيديو)</option></select></div>\n<div><label>العملة</label><select data-k=\"cur\"><option>JOD</option><option>USD</option><option>EUR</option><option>SAR</option><option>AED</option></select></div>\n<div><label>شكل الفيديو</label><select data-k=\"va\"><option value=\"\">—</option><option value=\"v\">عمودي 9:16</option><option value=\"h\">أفقي 16:9</option><option value=\"sq\">مربّع 1:1</option><option value=\"mix\">مختلط حسب الحاجة</option></select></div>\n<div><label>الدقة</label><input data-k=\"vr\" placeholder=\"مثلاً 1080p أو 4K\" dir=\"ltr\"></div>\n<div id=\"ch-fvc\"><label>عدد الفيديوهات</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"vc\" placeholder=\"مثلاً 2\"></div>\n<div id=\"ch-fvd\"><label>مدة الفيديو (حتى كم ثانية)</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"vd\" placeholder=\"مثلاً 45\"></div>\n<div id=\"ch-pSingle\"><label id=\"ch-lblPrice\">السعر الإجمالي للفيديوهات</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"price\" placeholder=\"مثلاً 25\"></div>\n<div id=\"ch-pCamp\" class=\"ch-full ch-hide\"><p class=\"ch-hint\" style=\"margin:0 0 10px\">حدّد كل نوع فيديو بالحملة: عدده ومدته وسعر الفيديو الواحد (حسب طريقة تصويره). المجموع بينحسب لحاله.</p><div id=\"ch-cpBox\"></div><div class=\"ch-acts\"><button class=\"ch-btn o\" id=\"ch-addCp\" type=\"button\">+ إضافة نوع فيديو</button></div></div>\n</div>\n\n<div class=\"ch-sec\">٢. الدفع</div>\n<div class=\"ch-g\">\n<div class=\"ch-full\"><label>طريقة الدفع</label><select data-k=\"pay\"><option value=\"up50\">50% مقدّم و50% عند التسليم</option><option value=\"del\">كامل المبلغ عند التسليم</option><option value=\"full\">كامل المبلغ مقدّماً</option></select></div>\n</div>\n<p class=\"ch-hint\" id=\"ch-payHint\"></p>\n<p class=\"ch-hint\" id=\"ch-sumHint\" style=\"font-weight:700;color:var(--text-primary)\"></p>\n\n<div class=\"ch-sec\">٣. التسليم والتعديلات</div>\n<div class=\"ch-g\">\n<div><label>مدة التسليم (أيام)</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"delay\" placeholder=\"\"></div>\n<div><label>أيام الرد على التسليم (بعدها بيعتبر مقبول)</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"acc\" placeholder=\"\"></div>\n<div><label>عدد التعديلات المشمولة بالسعر</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"revs\" placeholder=\"\"></div>\n<div><label id=\"ch-lblExtra\">سعر التعديل الإضافي (فاضي = بيتفق عليه)</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"extra\" placeholder=\"مثلاً 10\"></div>\n<div class=\"ch-full\"><label>فترة الإشعار قبل الإنهاء (أيام)</label><input type=\"number\" min=\"0\" inputmode=\"decimal\" data-k=\"notice\" placeholder=\"\"></div>\n</div>\n\n<div class=\"ch-sec\">٤. النشر</div>\n<div class=\"ch-g\">\n<div class=\"ch-full\"><label>نشر الأعمال بسجل أعمالك</label><select data-k=\"pub\"><option value=\"now\">نشر مباشر بعد التسليم</option><option value=\"after\">بعد ما ينشره العميل أولاً</option><option value=\"none\">بدون نشر (مشروع سرّي)</option></select></div>\n</div>\n</div>\n\n<div class=\"ch-card\"><h2>خدمات إضافية (اختياري)</h2><p class=\"ch-hint\" style=\"margin:0 0 10px\">علّم الخدمة اللي بدك تضيفها واكتب العدد وسعرها الكلي. سعرها بينضاف على سعر الفيديوهات ويطلع الإجمالي بقسم السعر. إذا ما علّمت شي ما بتظهر بالعقد.</p><div id=\"ch-adBox\"></div><div id=\"ch-acBox\"></div><div class=\"ch-acts\"><button class=\"ch-btn o\" id=\"ch-addAc\" type=\"button\">+ خدمة إضافية ثانية</button></div></div>\n\n<div class=\"ch-card\"><h2>توقيعك</h2><canvas class=\"ch-pad\" id=\"ch-padA\" width=\"640\" height=\"220\"></canvas><p class=\"ch-hint\">بينحفظ على هذا المتصفح وبينحط تلقائياً بكل عقد.</p><div class=\"ch-acts\"><button class=\"ch-btn o\" id=\"ch-clrA\" type=\"button\">مسح</button></div></div>\n\n<div class=\"ch-card\"><h2>توقيع العميل</h2><canvas class=\"ch-pad\" id=\"ch-padC\" width=\"640\" height=\"220\"></canvas><p class=\"ch-hint\">خلّي العميل يوقّع هون بإصبعه أو بالماوس، أو ارفع صورة توقيعه (PNG). ما بينحفظ بعد ما تسكّر.</p><div class=\"ch-acts\"><button class=\"ch-btn o\" id=\"ch-clrC\" type=\"button\">مسح</button><label class=\"ch-btn o ch-file\">رفع صورة التوقيع<input type=\"file\" id=\"ch-upC\" accept=\"image/png,image/*\" hidden></label></div></div>\n\n<div class=\"ch-acts\"><button class=\"ch-btn\" id=\"ch-print\" type=\"button\">طباعة العقد</button><button class=\"ch-btn o\" id=\"ch-dl\" type=\"button\">تنزيل PDF (غير قابل للتعديل)</button></div>\n<p class=\"ch-hint\" id=\"ch-msg\"></p>\n<div class=\"ch-prev\">معاينة العقد</div>\n</div>\n<div id=\"ch-doc\"></div>\n</div>\n";
+const T=(ar,a,e)=>ar?a:e;
+const $=id=>document.getElementById('ch-'+id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let S={lang:'ar',svc:'edit',pm:'single',price:'',cur:'JOD',cp:[{n:'',q:'',d:'',p:''}],vc:'',vd:'',va:'',vr:'',revs:'2',mode:'once',extra:'',notice:'7',acc:'7',pay:'up50',pub:'now',delay:'14',me:'',meId:'',mePhone:'',cl:'',clId:'',clPhone:'',ad:{},ac:[],sigA:'',sigC:'',date:today()};
+
+const okSig=u=>/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(u||'');
+const ASP={v:['عمودي 9:16','vertical 9:16'],h:['أفقي 16:9','horizontal 16:9'],sq:['مربّع 1:1','square 1:1'],mix:['مختلط حسب الحاجة','mixed as needed']};
+const AD=[['a1','هوية بصرية (Branding)','Visual identity (branding)'],['a2','تصميم شعار','Logo design'],['a3','تصميم بوستات سوشال ميديا','Social media post design'],['a4','ستوريز / ريلز إضافية','Extra stories / reels'],['a5','تعليق صوتي','Voice-over'],['a6','ترجمة وسب تايتل','Subtitles / translation'],['a7','تصوير فوتوغرافي','Photography'],['a8','إدارة حسابات التواصل','Social media management']];
+const pos=v=>v!==''&&v!=null&&+v>0;
+const blank='……';
+const nv=v=>pos(v)?String(+v):blank;
+
+function svcName(s,ar){return({edit:T(ar,'مونتاج الفيديو','video editing'),shoot:T(ar,'التصوير','video shooting'),both:T(ar,'التصوير والمونتاج','video shooting and editing'),ai:T(ar,'إنتاج فيديو بالذكاء الاصطناعي','AI video production')})[s.svc]}
+
+function specTxt(s,ar){
+  const p=[];
+  if(s.pm!=='campaign'&&pos(s.vc))p.push(T(ar,'عدد الفيديوهات: '+(+s.vc),'Number of videos: '+(+s.vc)));
+  if(s.pm!=='campaign'&&pos(s.vd))p.push(T(ar,'مدة الفيديو: حتى '+(+s.vd)+' ثانية','Length: up to '+(+s.vd)+' seconds'));
+  if(ASP[s.va])p.push(T(ar,'الشكل: ','Format: ')+ASP[s.va][ar?0:1]);
+  if((s.vr||'').trim())p.push(T(ar,'الدقة: ','Resolution: ')+s.vr.trim());
+  return p.length?'\n'+T(ar,'المواصفات: ','Specifications: ')+p.join(ar?'، ':', ')+'.':'';
+}
+function modeTxt(s,ar){
+  if(s.mode==='monthly')return T(ar,
+    '\nنوع التعاون: شهري، يتجدد كل شهر حتى ينهيه أحد الطرفين بإشعار وفق بند الإنهاء. وتسري المواصفات والسعر المذكوران أعلاه على كل شهر، ويُستحق الدفع عن كل شهر.',
+    '\nCollaboration type: monthly. It renews every month until either party ends it with notice as per the termination clause. The price and specifications above apply to each month, and payment is due monthly.');
+  return T(ar,'\nنوع التعاون: مرة واحدة فقط (مشروع واحد).','\nCollaboration type: one-time only (a single project).');
+}
+function extraTxt(s,ar){
+  if(pos(s.extra))return +s.extra+' '+s.cur+T(ar,' عن كل تعديل إضافي',' per extra revision');
+  return T(ar,'يُتفق عليه مسبقاً قبل البدء بتنفيذه','agreed beforehand');
+}
+
+const fm=n=>String(Math.round(n*100)/100);
+const cpLines=s=>(s.cp||[]).filter(c=>c&&((c.n||'').trim()||c.q||c.d||c.p));
+const addList=(s,ar)=>AD.filter(t=>s.ad&&(t[0] in s.ad)).map(t=>({n:t[ar?1:2],q:s.ad[t[0]].q,p:s.ad[t[0]].p})).concat((s.ac||[]).filter(c=>c&&c.n&&c.n.trim()).map(c=>({n:c.n.trim(),q:c.q,p:c.p})));
+function totals(s){
+  let v=null;
+  if(s.pm==='campaign'){const t=cpLines(s).reduce((a,c)=>pos(c.q)&&pos(c.p)?a+(+c.q)*(+c.p):a,0);v=t>0?t:null}
+  else v=pos(s.price)?+s.price:null;
+  const l=addList(s,1);
+  return{v:v,a:l.reduce((t,x)=>t+(pos(x.p)?+x.p:0),0),n:l.length,missing:l.some(x=>!pos(x.p))};
+}
+function clauses(s){
+  const ar=s.lang==='ar',cur=s.cur,L=[];
+  const mon=s.mode==='monthly',camp=s.pm==='campaign',cpl=cpLines(s);
+  const cpSpec=c=>{const nm=(c.n||'').trim()||T(ar,'فيديو','Video'),p=[];
+    if(pos(c.q))p.push(T(ar,'العدد: ','Qty: ')+(+c.q));
+    if(pos(c.d))p.push(T(ar,'مدة الفيديو: حتى '+(+c.d)+' ثانية','Length: up to '+(+c.d)+' seconds'));
+    return '• '+nm+(p.length?' — '+p.join(ar?'، ':', '):'')};
+  const startAfter=s.pay==='del'?T(ar,'استلام مواد العميل','receiving the client\'s materials')
+    :s.pay==='full'?T(ar,'استلام مواد العميل وكامل المبلغ','receiving the client\'s materials and the full payment')
+    :T(ar,'استلام مواد العميل والدفعة الأولى','receiving the client\'s materials and the first payment');
+  L.push([T(ar,'الخدمة','Services'),
+    T(ar,'يلتزم المنفّذ بتقديم خدمة: '+svcName(s,1)+' للعميل.','The Provider will deliver to the Client: '+svcName(s,0)+'.')
+    +(camp?T(ar,'\nتتكون الحملة من الفيديوهات التالية:\n','\nThe campaign consists of the following videos:\n')+(cpl.length?cpl.map(cpSpec).join('\n'):'—'):'')+specTxt(s,ar)+modeTxt(s,ar)
+    +T(ar,'\nمدة التسليم: '+nv(s.delay)+' يوماً، تبدأ من تاريخ '+startAfter+'.','\nDelivery time: '+nv(s.delay)+' days, starting after '+startAfter+'.')
+    +(s.svc==='ai'?T(ar,'\nيُعلم المنفّذ العميل بأن المخرجات منتجة بأدوات ذكاء اصطناعي، ويخضع استخدامها لشروط المنصات المستخدمة.','\nThe Provider informs the Client that outputs are generated with AI tools, and their use is subject to the terms of those platforms.'):'')]);
+
+  const adl=addList(s,ar);
+  if(adl.length){
+    const rows=adl.map(a=>'• '+a.n+(pos(a.q)?' ('+T(ar,'العدد: ','Qty: ')+(+a.q)+')':'')+' — '+(pos(a.p)?(+a.p)+' '+cur:T(ar,'يُتفق عليه','to be agreed'))).join('\n');
+    const sum=adl.reduce((t,a)=>t+(pos(a.p)?+a.p:0),0),missing=adl.some(a=>!pos(a.p));
+    let tx=T(ar,'يشمل هذا العقد الخدمات الإضافية التالية:\n','This contract also includes the following additional services:\n')+rows
+      +T(ar,'\nوتُضاف أسعارها إلى سعر الفيديوهات ويظهر الإجمالي في بند السعر، ويسري عليها ما يسري على الخدمات الأساسية من أحكام الدفع والتعديلات والملكية. ويُتفق خطياً على مدة تسليمها إن لم تكن محددة في هذا العقد.','\nTheir prices are added to the videos price and the total appears in the Pricing clause, and the payment, revision and ownership terms of the main services apply to them. Their delivery time is agreed in writing if not already specified in this contract.');
+    L.push([T(ar,'الخدمات الإضافية','Additional services'),tx]);
+  }
+
+  const tt=totals(s);
+  let pr;
+  if(camp){
+    const rows=cpl.map(c=>{const nm=(c.n||'').trim()||T(ar,'فيديو','Video');return '• '+nm+' — '+(pos(c.q)&&pos(c.p)?(+c.q)+' × '+(+c.p)+' '+cur+' = '+fm(c.q*c.p)+' '+cur:T(ar,'يُتفق عليه','to be agreed'))}).join('\n');
+    pr=T(ar,'سعر الفيديوهات:\n','Videos price:\n')+(rows||'—')
+      +T(ar,'\nإجمالي سعر الفيديوهات'+(mon?' عن كل شهر':'')+': '+(tt.v!=null?fm(tt.v)+' '+cur:blank)+'.','\nTotal videos price'+(mon?' per month':'')+': '+(tt.v!=null?fm(tt.v)+' '+cur:blank)+'.');
+  }else pr=T(ar,'سعر الفيديوهات'+(mon?' عن كل شهر':'')+': '+nv(s.price)+' '+cur+'.','Videos price'+(mon?' per month':'')+': '+nv(s.price)+' '+cur+'.');
+  if(tt.n>0){
+    pr+=T(ar,'\nسعر الخدمات الإضافية: '+(tt.a>0?fm(tt.a)+' '+cur:'يُتفق عليه')+(mon?' (تُدفع مرة واحدة)':'')+'.','\nAdditional services price: '+(tt.a>0?fm(tt.a)+' '+cur:'to be agreed')+(mon?' (paid once)':'')+'.');
+    if(tt.v!=null){
+      pr+=mon
+        ?T(ar,'\nالإجمالي عن الشهر الأول (شاملاً الخدمات الإضافية): '+fm(tt.v+tt.a)+' '+cur+'، وعن كل شهر لاحق: '+fm(tt.v)+' '+cur+(tt.missing?'. عدا البنود التي يُتفق على سعرها':'')+'.','\nTotal for the first month (including additional services): '+fm(tt.v+tt.a)+' '+cur+', and for each following month: '+fm(tt.v)+' '+cur+(tt.missing?'. Excluding items whose price is still to be agreed':'')+'.')
+        :T(ar,'\nالإجمالي الكلي (الفيديوهات + الخدمات الإضافية): '+fm(tt.v+tt.a)+' '+cur+(tt.missing?'، عدا البنود التي يُتفق على سعرها':'')+'.','\nGrand total (videos + additional services): '+fm(tt.v+tt.a)+' '+cur+(tt.missing?', excluding items whose price is still to be agreed':'')+'.');
+    }
+  }
+  pr+=T(ar,'\nوهذا السعر نهائي، ولا تجوز الزيادة عليه إلا باتفاق خطي بين الطرفين.','\nThis price is final and cannot be increased except by written agreement between both parties.');
+  L.push([T(ar,'السعر','Pricing'),pr]);
+
+  L.push([T(ar,'الدفع','Payment'),
+    ({up50:T(ar,'يُدفع 50% من إجمالي قيمة العقد عند بدء العمل و50% عند التسليم النهائي.','50% of the total contract value at the start and 50% on final delivery.'),
+      del:T(ar,'يُدفع كامل المبلغ عند التسليم.','Full amount on delivery.'),
+      full:T(ar,'يُدفع كامل المبلغ مقدماً قبل بدء العمل.','Full amount upfront before work begins.')})[s.pay]
+    +T(ar,'\nيتم الدفع نقداً أو بحوالة بنكية أو بأي وسيلة أخرى يتفق عليها الطرفان.','\nPayment is made in cash, by bank transfer, or by any method agreed by both parties.')
+    +T(ar,'\nيؤدي تأخر الدفع إلى توقف العمل وتأجيل موعد التسليم إلى حين استلام المبلغ المستحق.','\nLate payment pauses the work and postpones delivery until the due amount is received.')
+    +T(ar,'\nيسلّم المنفّذ الملفات النهائية بعد استلام كامل المبلغ.','\nThe Provider hands over the final files once the full amount has been received.')]);
+
+  L.push([T(ar,'التعديلات','Revisions'),
+    T(ar,'عدد التعديلات المشمولة في السعر: '+nv(s.revs)+'. وأي تعديل إضافي يكون سعره: '+extraTxt(s,1)+'.','The price includes '+nv(s.revs)+' revisions. Any further revision costs: '+extraTxt(s,0)+'.')
+    +T(ar,'\nيُقصد بالتعديل إجراء تغييرات على الفيديو المسلَّم (كالقص والترتيب والنصوص والألوان والصوت)، ولا يشمل إعادة التصوير أو تغيير الفكرة. ويقدّم العميل طلبات التعديل كتابياً (عبر واتساب أو البريد الإلكتروني) مجمّعة في طلب واحد لكل تعديل.','\nA revision means changes to the delivered video (cuts, order, text, colors, sound...). It does not include re-shooting or changing the concept. The Client requests revisions in writing (WhatsApp or email), grouped in one request per revision.')
+    +T(ar,'\nبعد كل تسليم، يكون للعميل مدة '+nv(s.acc)+' أيام للرد بالموافقة أو بطلب تعديل، وإذا انقضت المدة دون رد تُعتبر النسخة مقبولة.','\nAfter each delivery, the Client has '+nv(s.acc)+' days to approve or request a revision. If the Client does not reply within that period, the version is considered accepted.')]);
+
+  L.push([T(ar,'مواد العميل وتغيير الفكرة','Client materials and scope changes'),
+    T(ar,'يلتزم العميل بتزويد المنفّذ بالمواد المطلوبة (لقطات، شعار، نص...) في الوقت المناسب، وأي تأخير منه يؤخر موعد التسليم بالمدة نفسها.\nيُعد تغيير الفكرة أو النص بعد اعتمادهما طلباً جديداً، وقد يترتب عليه تغيير في السعر والموعد.\nيضمن العميل أنه يملك كامل الحقوق في المواد التي يقدمها (لقطات، صور، موسيقى، شعارات...)، ويتحمل وحده المسؤولية عن أي مطالبة تتعلق بحقوق الملكية الفكرية الناشئة عنها.',
+      'The Client will provide the required materials (footage, logo, script...) on time; any delay moves delivery by the same period.\nChanging the concept or script after approval is a new request and may change the price and timeline.\nThe Client guarantees that they hold all rights to the materials they provide (footage, images, music, logos...). Any intellectual property issue arising from them is the Client\'s responsibility, not the Provider\'s.')]);
+
+  const pb={now:T(ar,'ويحق للمنفّذ عرض العمل في سجل أعماله وحساباته فور التسليم.','The Provider may show the work in their portfolio and accounts right after delivery.'),
+    after:T(ar,'ويحق للمنفّذ عرض العمل في سجل أعماله وحساباته بعد أن ينشره العميل أولاً.','The Provider may show the work in their portfolio and accounts after the Client publishes it first.'),
+    none:T(ar,'ولا يحق للمنفّذ عرض هذا العمل في أي مكان (مشروع سري).','The Provider will not show this work anywhere (confidential project).')}[s.pub];
+  L.push([T(ar,'الملكية والحقوق','Ownership and rights'),
+    T(ar,'عند سداد العميل كامل المبلغ، تنتقل إليه حقوق الاستغلال المالي للفيديو النهائي، ومنها عرضه ونشره ونسخه وتوزيعه واستخدامه بأي وسيلة وعلى أي منصة، وذلك لأغراض أعمال العميل وتسويقه، دون تحديد مدة، وفي جميع الدول.',
+      'Once the Client pays the full amount, the financial exploitation rights in the final video pass to the Client: displaying, publishing, copying, distributing and using it by any means and on any platform, for the Client\'s business and marketing purposes, with no time limit and worldwide.')
+    +T(ar,'\nيحتفظ المنفّذ بملفات المشروع الأصلية وأدواته، وتبقى له حقوقه المعنوية المقررة بموجب القانون.','\nThe Provider keeps the original project files and tools, and keeps the moral rights granted by law.')
+    +'\n'+pb]);
+
+  L.push([T(ar,'السرية','Confidentiality'),
+    T(ar,'يلتزم كل طرف بالمحافظة على سرية المعلومات التي يطلع عليها عن الطرف الآخر بسبب هذا العقد (كالمواد والخطط والأسعار)، وعدم إفشائها لأي جهة إلا بموافقته.','Each party keeps confidential the information it learns about the other party through this contract (materials, plans, prices) and does not share it with anyone without their consent.')]);
+
+  L.push([T(ar,'طبيعة العلاقة','Nature of the relationship'),
+    T(ar,'يعمل المنفّذ بصفة مستقلة، وهذا العقد عقد تقديم خدمات وليس عقد عمل، ولا ينشئ علاقة بين عامل وصاحب عمل. ويحدد المنفّذ أسلوب عمله وأدواته ووقته ضمن موعد التسليم المتفق عليه.','The Provider works independently. This is a service contract, not an employment contract, and it does not create an employer–employee relationship. The Provider decides how, with what tools and when to work, within the delivery deadline.')]);
+
+  L.push([T(ar,'الظروف القاهرة والمسؤولية','Force majeure and liability'),
+    T(ar,'إذا طرأ ظرف خارج عن إرادة الطرفين (كالكوارث أو القرارات الرسمية أو انقطاع الكهرباء أو الإنترنت أو المرض المفاجئ) يحول دون تنفيذ العمل، يُؤجَّل موعد التسليم بمدة الظرف نفسها على ألا تزيد على 7 أيام، ولا يترتب على أي من الطرفين مسؤولية بسبب ذلك. وإذا استمر الظرف أكثر من 7 أيام، يحق لأي من الطرفين إنهاء العقد، ويستحق المنفّذ مقابل ما أنجزه من عمل حتى ذلك التاريخ.\nتقتصر مسؤولية المنفّذ على المبلغ الذي استلمه بموجب هذا العقد، إلا في حالتي الغش والخطأ الجسيم المتعمد.',
+      'If a circumstance beyond the control of both parties occurs (such as a disaster, an official decision, a power or internet outage, or sudden illness) that prevents the work from being carried out, delivery is postponed by the same period, up to a maximum of 7 days, and neither party is held liable. If the circumstance lasts longer than 7 days, either party may end the contract, and the Provider is paid for the work completed up to that date.\nThe Provider\'s liability is limited to the amount received under this contract, except in cases of fraud or intentional gross misconduct.')]);
+
+  L.push([T(ar,'الإنهاء','Termination'),
+    T(ar,'يحق لأي من الطرفين إنهاء العقد بإشعار خطي (تكفي رسالة واتساب) لا تقل مدته عن '+nv(s.notice)+' أيام. وفي هذه الحالة يدفع العميل للمنفّذ مقابل العمل المنجز حتى تاريخ الإنهاء، ويُحتسب من ذلك ما دُفع سابقاً، ويسلّم المنفّذ العمل المنجز مقابل سداد المستحقات.\nوإذا أخلّ أحد الطرفين بالتزام جوهري ولم يعالجه خلال '+nv(s.notice)+' أيام من تنبيهه خطياً، يحق للطرف الآخر إنهاء العقد فوراً.',
+      'Either party may end the contract with at least '+nv(s.notice)+' days\' written notice (WhatsApp is enough). In that case the Client pays the Provider for the work completed up to the end date, the first payment is counted towards it, and the Provider hands over the completed work against payment of what is due.\nIf either party breaches a key obligation and does not fix it within '+nv(s.notice)+' days of written notice, the other party may end the contract immediately.')]);
+
+  L.push([T(ar,'الخلافات والقانون المطبّق','Disputes and governing law'),
+    T(ar,'يسعى الطرفان عند حدوث أي خلاف إلى حله ودياً أولاً، ويكون هذا العقد هو المرجع بينهما. وإذا تعذّر الحل الودي، يُطبّق القانون الأردني وتكون محاكم عمّان هي المختصة.',
+      'If a disagreement arises, both parties first talk it through in good faith, using this contract as the reference. If it cannot be settled amicably, Jordanian law applies and the courts of Amman have jurisdiction.')]);
+
+  L.push([T(ar,'أحكام عامة','General provisions'),
+    T(ar,'يمثل هذا العقد الاتفاق الكامل بين الطرفين، ويلغي أي اتفاق أو وعد سابق له. ولا يُعتد بأي تعديل عليه إلا إذا كان خطياً وموافقاً عليه من الطرفين. وإذا ثبت بطلان أي بند فيه، تبقى بقية البنود سارية.\nيتفق الطرفان على أن التوقيع الإلكتروني أو صورة التوقيع على هذا العقد تُعدّ ملزمة كالتوقيع الخطي.\nبتوقيع الطرفين يصبح هذا العقد ملزماً لهما قانوناً، ويقرّان بأنهما اطلعا عليه وفهما مضمونه ووافقا عليه بكامل إرادتهما.\nحُرّر هذا العقد من نسختين، بيد كل طرف نسخة.',
+      'This contract is the entire agreement between the parties and replaces any earlier statements or promises. Any amendment must be in writing and agreed by both parties. If any clause is found invalid, the remaining clauses stay in force.\nBoth parties agree that an electronic signature, or an image of a signature, on this contract is binding in the same way as a handwritten signature.\nOnce signed by both parties, this contract is legally binding on them, and they confirm that they have read and understood it and agree to it of their own free will.\nThis contract is made in two copies, one for each party.')]);
+  return L;
+}
+
+function party(s,ar,own){
+  const name=own?s.me:s.cl,id=own?s.meId:s.clId,ph=own?s.mePhone:s.clPhone;
+  return T(ar,own?'المنفّذ: ':'العميل: ',own?'Provider: ':'Client: ')+((name||'').trim()||blank)
+    +((id||'').trim()?' — '+T(ar,'الرقم الوطني / السجل التجاري: ','ID / Commercial reg.: ')+id.trim():'')
+    +((ph||'').trim()?' — '+T(ar,'هاتف: ','Phone: ')+ph.trim():'');
+}
+function introLines(s,ar){return [T(ar,'تم الاتفاق بتاريخ '+s.date+' بين:','Agreed on '+s.date+' between:'),party(s,ar,1),party(s,ar,0)]}
+function sigBlock(s,ar,own){
+  const name=own?s.me:s.cl,id=own?s.meId:s.clId,sig=own?s.sigA:s.sigC;
+  return{title:T(ar,own?'المنفّذ':'العميل',own?'Provider':'Client'),name:(name||'').trim(),id:(id||'').trim(),sig:okSig(sig)?sig:'',date:okSig(sig)?s.date:''};
+}
+function render(s){
+  const ar=s.lang==='ar',d=$('doc');
+  d.dir=ar?'rtl':'ltr';d.lang=s.lang;
+  const blk=(b)=>`<div><b>${esc(b.title)}</b>${T(ar,'الاسم: ','Name: ')}${esc(b.name)||'________'}<br>${b.id?T(ar,'الرقم الوطني / السجل: ','ID / Reg.: ')+esc(b.id)+'<br>':''}${T(ar,'التوقيع: ','Signature: ')}${b.sig?`<img src="${b.sig}" alt="" style="height:56px;max-width:100%;vertical-align:middle;display:inline-block">`:'________'}<br>${T(ar,'التاريخ: ','Date: ')}${b.date?esc(b.date):'________'}</div>`;
+  d.innerHTML=`<h1>${T(ar,'عقد تقديم خدمات','Service Contract')}</h1><p class="in">${introLines(s,ar).map(esc).join('<br>')}</p>`
+   +clauses(s).map((c,i)=>`<div class="cl"><h3>${i+1}. ${esc(c[0])}</h3><p>${esc(c[1])}</p></div>`).join('')
+   +`<div class="ch-sg">${blk(sigBlock(s,ar,1))}${blk(sigBlock(s,ar,0))}</div>`;
+}
+
+/* ---------- signature pad ---------- */
+function pad(c,on){
+  const x=c.getContext('2d');let d=false;
+  x.lineWidth=4;x.lineCap='round';x.lineJoin='round';x.strokeStyle='#111';
+  const p=v=>{const r=c.getBoundingClientRect();return[(v.clientX-r.left)*c.width/r.width,(v.clientY-r.top)*c.height/r.height]};
+  c.onpointerdown=v=>{v.preventDefault();d=true;try{c.setPointerCapture(v.pointerId)}catch(e){}const q=p(v);x.beginPath();x.moveTo(q[0],q[1]);x.lineTo(q[0]+.1,q[1]);x.stroke()};
+  c.onpointermove=v=>{if(d){const q=p(v);x.lineTo(q[0],q[1]);x.stroke()}};
+  c.onpointerup=c.onpointercancel=()=>{if(d){d=false;on(c.toDataURL('image/png'))}};
+  return{clear(){x.clearRect(0,0,c.width,c.height);on('')},load(u){x.clearRect(0,0,c.width,c.height);const i=new Image();i.onload=()=>x.drawImage(i,0,0,c.width,c.height);i.src=u}};
+}
+
+/* ---------- PDF (flat image pages => not editable) ---------- */
+const loadImg=u=>new Promise(r=>{const i=new Image();i.onload=()=>r(i);i.onerror=()=>r(null);i.src=u});
+async function makePages(s){
+  const ar=s.lang==='ar';
+  try{await Promise.all([document.fonts.load('400 30px Cairo'),document.fonts.load('700 30px Cairo'),document.fonts.load('900 30px Cairo')])}catch(e){}
+  const F='Cairo, Tahoma, Arial, sans-serif';
+  const W=1654,H=2339,M=140,CW=W-2*M,pages=[];
+  let cv,x,y;
+  const ax=ar?W-M:M, al=ar?'right':'left';
+  const np=()=>{cv=document.createElement('canvas');cv.width=W;cv.height=H;x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,H);x.fillStyle='#111';x.direction=ar?'rtl':'ltr';x.textBaseline='alphabetic';y=M;pages.push(cv)};
+  const wrap=(t,font,mw)=>{x.font=font;const out=[];t.split('\n').forEach(par=>{const w=par.split(' ');let line='';w.forEach(word=>{const test=line?line+' '+word:word;if(line&&x.measureText(test).width>mw){out.push(line);line=word}else line=test});out.push(line)});return out};
+  const room=h=>{if(y+h>H-M-40)np()};
+  np();
+  // title
+  x.font='900 66px '+F;x.textAlign='center';x.fillText(T(ar,'عقد تقديم خدمات','Service Contract'),W/2,y+60);y+=100;
+  x.font='500 29px '+F;x.fillStyle='#444';
+  introLines(s,ar).forEach(l=>wrap(l,'500 29px '+F,CW).forEach(w=>{x.textAlign='center';x.fillText(w,W/2,y+30);y+=46}));
+  y+=10;x.fillStyle='#000';x.fillRect(M,y,CW,2);y+=34;x.fillStyle='#111';
+  // clauses
+  clauses(s).forEach((c,i)=>{
+    const hf='700 35px '+F,bf='400 29px '+F;
+    const hl=wrap((i+1)+'. '+c[0],hf,CW);
+    room(60+hl.length*54+54);
+    y+=18;x.fillStyle='#000';x.font=hf;x.textAlign=al;hl.forEach(l=>{x.fillText(l,ax,y+36);y+=54});
+    x.fillStyle='#222';
+    wrap(c[1],bf,CW).forEach(l=>{room(48);x.font=bf;x.textAlign=al;x.fillStyle='#222';x.fillText(l,ax,y+30);y+=48});
+    y+=6;
+  });
+  // signatures
+  room(420);y+=24;x.fillStyle='#000';x.fillRect(M,y,CW,2);y+=26;
+  const cw=CW/2-20;
+  const cols=[sigBlock(s,ar,1),sigBlock(s,ar,0)];
+  for(let k=0;k<2;k++){
+    const b=cols[k],a=ar?(W-M-k*(CW/2)):(M+k*(CW/2));
+    let yy=y;
+    x.textAlign=al;x.fillStyle='#000';x.font='700 32px '+F;x.fillText(b.title,a,yy+34);yy+=56;
+    x.font='400 28px '+F;x.fillStyle='#222';
+    const line=t=>{wrap(t,x.font,cw).forEach(w=>{x.fillText(w,a,yy+28);yy+=44})};
+    line(T(ar,'الاسم: ','Name: ')+(b.name||'__________'));
+    if(b.id)line(T(ar,'الرقم الوطني / السجل: ','ID / Reg.: ')+b.id);
+    x.fillText(T(ar,'التوقيع: ','Signature: ')+(b.sig?'':'__________'),a,yy+28);yy+=44;
+    if(b.sig){const im=await loadImg(b.sig);if(im){const hh=110,ww=Math.min(im.width*hh/im.height,cw);const hh2=ww*im.height/im.width;x.drawImage(im,ar?a-ww:a,yy,ww,hh2);yy+=hh2+10}}
+    x.font='400 28px '+F;x.textAlign=al;x.fillStyle='#222';
+    x.fillText(T(ar,'التاريخ: ','Date: ')+(b.date||'__________'),a,yy+28);
+  }
+  // footer page numbers
+  pages.forEach((p,i)=>{const g=p.getContext('2d');g.fillStyle='#888';g.font='400 24px '+F;g.textAlign='center';g.direction='ltr';g.fillText((i+1)+' / '+pages.length,W/2,H-60)});
+  return pages;
+}
+function buildPdf(jpgs){
+  const enc=new TextEncoder(),parts=[],offs=[];let off=0;
+  const push=d=>{const u=typeof d==='string'?enc.encode(d):d;parts.push(u);off+=u.length};
+  const obj=(n,fn)=>{offs[n]=off;push(n+' 0 obj\n');fn();push('endobj\n')};
+  const n=jpgs.length;
+  push('%PDF-1.4\n');
+  obj(1,()=>push('<< /Type /Catalog /Pages 2 0 R >>\n'));
+  obj(2,()=>push('<< /Type /Pages /Count '+n+' /Kids ['+jpgs.map((_,i)=>(3+3*i)+' 0 R').join(' ')+'] >>\n'));
+  jpgs.forEach((j,i)=>{
+    const pg=3+3*i,ct=4+3*i,im=5+3*i,cs='q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+    obj(pg,()=>push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 '+im+' 0 R >> >> /Contents '+ct+' 0 R >>\n'));
+    obj(ct,()=>push('<< /Length '+cs.length+' >>\nstream\n'+cs+'\nendstream\n'));
+    obj(im,()=>{push('<< /Type /XObject /Subtype /Image /Width '+j.w+' /Height '+j.h+' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length '+j.b.length+' >>\nstream\n');push(j.b);push('\nendstream\n')});
+  });
+  const total=3+3*n,xr=off;
+  push('xref\n0 '+total+'\n0000000000 65535 f \n');
+  for(let i=1;i<total;i++)push(String(offs[i]).padStart(10,'0')+' 00000 n \n');
+  push('trailer\n<< /Size '+total+' /Root 1 0 R >>\nstartxref\n'+xr+'\n%%EOF');
+  return new Blob(parts,{type:'application/pdf'});
+}
+async function downloadPdf(){
+  const m=$('msg');m.textContent=T(S.lang==='ar','عم أجهّز الملف…','Preparing…');
+  try{
+    const pages=await makePages(S);
+    const jpgs=pages.map(c=>{const u=c.toDataURL('image/jpeg',0.92).split(',')[1],bin=atob(u),b=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)b[i]=bin.charCodeAt(i);return{b,w:c.width,h:c.height}});
+    const blob=buildPdf(jpgs);
+    const name='contract-'+((S.cl||'client').trim().replace(/[^A-Za-z0-9]+/g,'-').replace(/^-|-$/g,'')||'client')+'.pdf';
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);m.textContent='';
+  }catch(e){m.textContent='ما قدرت أجهّز الملف، جرّب مرة ثانية.'}
+}
+
+/* ---------- builder UI ---------- */
+function upd(){
+  const camp=S.pm==='campaign';
+  $('pSingle').classList.toggle('ch-hide',camp);
+  $('pCamp').classList.toggle('ch-hide',!camp);
+  $('fvc').classList.toggle('ch-hide',camp);$('fvd').classList.toggle('ch-hide',camp);
+  $('lblPrice').textContent=S.mode==='monthly'?'السعر الإجمالي للفيديوهات عن كل شهر':'السعر الإجمالي للفيديوهات';
+  $('lblExtra').textContent='سعر التعديل الإضافي ('+S.cur+') — فاضي = بيتفق عليه';
+  $('payHint').textContent=S.mode==='monthly'?'التعاون شهري: طريقة الدفع بتنطبق على كل شهر، والخدمات الإضافية بتنحسب مرة واحدة.':'';
+  const t=totals(S),h=$('sumHint');
+  h.textContent=t.v==null?'':(t.n>0?'الفيديوهات '+fm(t.v)+' + الخدمات الإضافية '+fm(t.a)+' = الإجمالي '+fm(t.v+t.a)+' '+S.cur:'إجمالي سعر الفيديوهات: '+fm(t.v)+' '+S.cur);
+  render(S);
+}
+const lsSet=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const saveMe=()=>lsSet('contractMe',JSON.stringify({me:S.me,meId:S.meId,mePhone:S.mePhone}));
+function cpUI(){
+  const box=$('cpBox');box.innerHTML='';
+  S.cp.forEach((c,i)=>{
+    const w=document.createElement('div');w.className='ch-line';
+    w.innerHTML='<div class="ch-row"><input class="cn" placeholder="نوع الفيديو (مثلاً: ريلز مع تصوير، مونتاج فقط...)"><button type="button" class="ch-btn o ch-x" aria-label="حذف" style="flex:0 0 48px">✕</button></div><div class="ch-g3"><div><label>العدد</label><input class="cq" type="number" min="1" inputmode="numeric"></div><div><label>المدة (ثانية)</label><input class="cd" type="number" min="1" inputmode="numeric"></div><div><label>سعر الفيديو الواحد</label><input class="cz" type="number" min="0" inputmode="decimal"></div></div><p class="ch-hint ch-lt"></p>';
+    const n=w.querySelector('.cn'),q=w.querySelector('.cq'),d=w.querySelector('.cd'),p=w.querySelector('.cz'),lt=w.querySelector('.ch-lt');
+    n.value=c.n||'';q.value=c.q||'';d.value=c.d||'';p.value=c.p||'';
+    const tot=()=>{lt.textContent=(pos(c.q)&&pos(c.p))?'إجمالي هذا النوع: '+fm(c.q*c.p)+' '+S.cur:''};
+    const sv=()=>{c.n=n.value;c.q=q.value;c.d=d.value;c.p=p.value;tot();upd()};
+    [n,q,d,p].forEach(e=>e.oninput=sv);tot();
+    w.querySelector('.ch-x').onclick=()=>{S.cp.splice(i,1);cpUI();upd()};
+    box.appendChild(w);
+  });
+}
+let builder=function(){
+  try{const m=JSON.parse(localStorage.getItem('contractMe')||'{}');['me','meId','mePhone'].forEach(k=>{if(typeof m[k]==='string')S[k]=m[k]});const g=localStorage.getItem('contractSigA');if(okSig(g))S.sigA=g}catch(e){}
+  ROOT.querySelectorAll('[data-k]').forEach(el=>{
+    el.value=S[el.dataset.k]||'';
+    el.addEventListener('input',()=>{S[el.dataset.k]=el.value;if(['me','meId','mePhone'].indexOf(el.dataset.k)>-1)saveMe();upd()});
+  });
+  const padA=pad($('padA'),u=>{S.sigA=u;lsSet('contractSigA',u);render(S)});
+  if(okSig(S.sigA))padA.load(S.sigA);
+  $('clrA').onclick=()=>padA.clear();
+  const padC=pad($('padC'),u=>{S.sigC=u;render(S)});
+  $('clrC').onclick=()=>padC.clear();
+  $('upC').onchange=e=>{
+    const f=e.target.files&&e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{const im=new Image();
+      im.onload=()=>{const c=document.createElement('canvas');c.width=640;c.height=220;const g=c.getContext('2d');
+        const k=Math.min(640/im.width,220/im.height),w=im.width*k,h=im.height*k;g.drawImage(im,(640-w)/2,(220-h)/2,w,h);
+        const u=c.toDataURL('image/png');S.sigC=u;padC.load(u);render(S);$('msg').textContent=''};
+      im.onerror=()=>{$('msg').textContent='الملف مش صورة صالحة، جرّب صورة PNG.'};
+      im.src=r.result};
+    r.readAsDataURL(f);e.target.value='';
+  };
+  const adb=$('adBox');
+  AD.forEach(t=>{
+    const r=document.createElement('div');r.className='ch-row';
+    r.innerHTML='<label class="ch-chk"><input type="checkbox"> '+t[1]+'</label><input class="s" type="number" min="1" inputmode="numeric" placeholder="العدد"><input class="s" type="number" min="0" inputmode="decimal" placeholder="السعر">';
+    const cb=r.querySelector('input[type=checkbox]'),ins=r.querySelectorAll('input.s');
+    cb.checked=(t[0] in S.ad);if(S.ad[t[0]]){ins[0].value=S.ad[t[0]].q||'';ins[1].value=S.ad[t[0]].p||''}
+    const sv=()=>{if(cb.checked)S.ad[t[0]]={q:ins[0].value,p:ins[1].value};else delete S.ad[t[0]];upd()};
+    cb.onchange=sv;ins[0].oninput=sv;ins[1].oninput=sv;adb.appendChild(r);
+  });
+  function acUI(){
+    const box=$('acBox');box.innerHTML='';
+    S.ac.forEach((c,i)=>{
+      const r=document.createElement('div');r.className='ch-row';
+      const n=document.createElement('input');n.placeholder='اسم الخدمة (مثلاً: تصميم منيو)';n.value=c.n;
+      const q=document.createElement('input');q.type='number';q.min='1';q.inputMode='numeric';q.placeholder='العدد';q.className='s';q.value=c.q;
+      const p=document.createElement('input');p.type='number';p.min='0';p.inputMode='decimal';p.placeholder='السعر';p.className='s';p.value=c.p;
+      const x=document.createElement('button');x.type='button';x.className='ch-btn o s';x.textContent='✕';x.style.flex='0 0 48px';x.setAttribute('aria-label','حذف الخدمة');
+      const sv=()=>{c.n=n.value;c.q=q.value;c.p=p.value;upd()};
+      n.oninput=sv;q.oninput=sv;p.oninput=sv;
+      x.onclick=()=>{S.ac.splice(i,1);acUI();upd()};
+      r.append(n,q,p,x);box.appendChild(r);
+    });
+  }
+  acUI();
+  $('addAc').onclick=()=>{S.ac.push({n:'',q:'',p:''});acUI();const q=$('acBox').querySelectorAll('input');if(q.length)q[q.length-3].focus();upd()};
+  cpUI();
+  $('addCp').onclick=()=>{S.cp.push({n:'',q:'',d:'',p:''});cpUI();const q=$('cpBox').querySelectorAll('.cn');if(q.length)q[q.length-1].focus();upd()};
+  $('dl').onclick=downloadPdf;
+  upd();
+};
+const _b=builder;builder=function(){_b();$('print').onclick=doPrint};
+})();
+</script>
 </body>
 </html>
