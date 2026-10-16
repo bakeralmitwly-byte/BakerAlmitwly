@@ -1466,6 +1466,21 @@
         }
 
         .vc.playing .vc-frame { display: block; }
+
+        /* Fullscreen button for YouTube embeds */
+        .yt-fs {
+            position: absolute; top: 8px; left: 8px; z-index: 12;
+            width: 30px; height: 30px; padding: 0; border: 0; border-radius: 6px;
+            background: rgba(0,0,0,.55); color: #fff; cursor: pointer;
+            display: none; align-items: center; justify-content: center;
+            -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+            transition: background .2s ease;
+        }
+        .yt-fs:hover { background: rgba(0,0,0,.8); }
+        .yt-fs svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; }
+        .main-video-wrapper .yt-fs { display: flex; }
+        .vc.playing .yt-fs { display: flex; }
+
         .vc.playing .vc-play  { opacity: 0; pointer-events: none; }
         .vc.playing .vc-strip { display: none; }
 
@@ -2041,7 +2056,7 @@
 </div>
 </div>
 </div><div class="main-video-wrapper">
-<iframe allowfullscreen="" src="https://www.youtube.com/embed/zRuO2rmcy3k" title="غدا الإعدام"></iframe>
+<iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen src="https://www.youtube.com/embed/zRuO2rmcy3k" title="غدا الإعدام"></iframe>
 </div><div class="bts-grid">
 <div class="bts-item"><img alt="كواليس غدا الإعدام" src="Images/exec-bts1.jpg"/></div>
 <div class="bts-item"><img alt="كواليس غدا الإعدام" src="Images/exec-bts2.jpg"/></div>
@@ -2323,7 +2338,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/3ycvRmooMyQ?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/3ycvRmooMyQ?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2332,7 +2347,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/J34nUT5V37w?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/J34nUT5V37w?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2341,7 +2356,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/gzV2vj7rYC8?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/gzV2vj7rYC8?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2350,7 +2365,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/VEfb7e8pZIc?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/VEfb7e8pZIc?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2359,7 +2374,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/8vR41cjJmfE?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/8vR41cjJmfE?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2368,7 +2383,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/ihiTqEuOblQ?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/ihiTqEuOblQ?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2377,7 +2392,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/s-AGwa62iFE?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/s-AGwa62iFE?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2386,7 +2401,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/TuTroaz4hEo?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/TuTroaz4hEo?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2395,7 +2410,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/aaWVj2HVf8w?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/aaWVj2HVf8w?autoplay=1&rel=0"></iframe>
         </div>
 
         <div class="vc">
@@ -2404,7 +2419,7 @@
             </div>
             <div class="vc-strip"><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div><div class="vc-hole"></div></div>
             <div class="vc-play"><div class="vc-play-ring"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-            <iframe class="vc-frame" allow="autoplay; encrypted-media" allowfullscreen data-src="https://www.youtube.com/embed/9Z5fh9XQaUg?autoplay=1&rel=0"></iframe>
+            <iframe allow="autoplay; encrypted-media; fullscreen; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen class="vc-frame" data-src="https://www.youtube.com/embed/9Z5fh9XQaUg?autoplay=1&rel=0"></iframe>
         </div>
 
     </div>
@@ -3601,6 +3616,26 @@ let builder=function(){
   upd();
 };
 const _b=builder;builder=function(){_b();$('print').onclick=doPrint};
+})();
+</script>
+<script>
+// Fullscreen button for YouTube embeds (works even if the player's own button is hidden/tiny)
+(function () {
+  var ICON = '<svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
+  function goFs(el) {
+    var f = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+    if (f) { try { var p = f.call(el); if (p && p.catch) p.catch(function () {}); } catch (e) {} }
+  }
+  document.querySelectorAll('iframe').forEach(function (fr) {
+    var u = fr.getAttribute('src') || fr.getAttribute('data-src') || '';
+    if (u.indexOf('youtube.com/embed') === -1) return;
+    var host = fr.parentElement;
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'yt-fs'; b.title = 'ملء الشاشة'; b.setAttribute('aria-label', 'ملء الشاشة');
+    b.innerHTML = ICON;
+    b.addEventListener('click', function (e) { e.stopPropagation(); goFs(fr); });
+    host.appendChild(b);
+  });
 })();
 </script>
 </body>
