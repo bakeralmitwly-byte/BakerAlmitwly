@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<style>
+html:not(.sys-ok) body>*:not(#sys-gate){display:none!important}
+html.sys-ok #sys-gate{display:none!important}
+#sys-gate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#0e1013;font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;color:#eaebef}
+#sys-gate form{display:flex;flex-direction:column;gap:12px;width:min(300px,86vw);text-align:center}
+#sys-gate input{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:inherit;font:inherit;text-align:center;letter-spacing:.3em;font-size:1.1rem}
+#sys-gate button{padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.1);color:inherit;font:inherit;cursor:pointer}
+#sys-gate .err{color:#ecaaa3;font-size:.85rem;min-height:1.2em}
+</style>
+<script>
+(function(){
+  var H="7a5df5ffa0dec2228d90b8d0a0f1b0767b748b0a41314c123075b8289e4e053f",K="sys_auth_ok",root=document.documentElement;
+  function sha(s){
+    if(window.crypto&&crypto.subtle){
+      return crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)).then(function(b){
+        return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("");});
+    }
+    return Promise.resolve(s==="1010"?H:"");
+  }
+  function unlock(){root.classList.add("sys-ok");document.dispatchEvent(new Event("sys-unlocked"));}
+  try{ if(localStorage.getItem(K)===H){ root.classList.add("sys-ok"); } }catch(e){}
+  document.addEventListener("DOMContentLoaded",function(){
+    if(root.classList.contains("sys-ok")){ document.dispatchEvent(new Event("sys-unlocked")); return; }
+    var g=document.createElement("div");g.id="sys-gate";
+    g.innerHTML='<form><div>أدخل كلمة السر</div><input type="password" inputmode="numeric" autocomplete="off" autofocus><div class="err"></div><button type="submit">دخول</button></form>';
+    document.body.appendChild(g);
+    var f=g.querySelector("form"),i=g.querySelector("input"),e=g.querySelector(".err");
+    f.addEventListener("submit",function(ev){
+      ev.preventDefault();
+      sha(i.value.trim()).then(function(x){
+        if(x===H){ try{localStorage.setItem(K,H)}catch(_){} unlock(); }
+        else{ e.textContent="كلمة السر غلط"; i.value=""; i.focus(); }
+      });
+    });
+    setTimeout(function(){i.focus()},50);
+  });
+})();
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1013;
+  --text:#eaebef; --muted:rgba(234,235,239,.58); --faint:rgba(234,235,239,.32);
+  --g:rgba(255,255,255,.045); --g2:rgba(255,255,255,.08); --gb:rgba(255,255,255,.09); --gb2:rgba(255,255,255,.16);
+  --hl:inset 0 1px 0 rgba(255,255,255,.07);
+  --shadow:0 12px 34px rgba(0,0,0,.30);
+  --accent:#b9c3d3; --warm:#ecaaa3;
+  --k-work:#8ea3bd; --k-project:#b9a08a; --k-content:#a79bb8; --k-lecture:#97b3a3; --k-uni:#bdb48f;
+  --font:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif; --hand:'Aref Ruqaa','IBM Plex Sans Arabic',serif;
+  --blur:blur(22px) saturate(140%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:15px}
+body{font-family:var(--font);color:var(--text);line-height:1.65;padding:28px 24px 90px;min-height:100vh;
+  background:
+    radial-gradient(1100px 700px at 85% -10%, rgba(125,145,175,.20), transparent 62%),
+    radial-gradient(900px 700px at 0% 105%, rgba(110,125,150,.14), transparent 62%),
+    var(--bg);
+  background-attachment:fixed}
+.wrap{max-width:1360px;margin:0 auto}
+button,input,select{font-family:inherit;font-size:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+::-webkit-scrollbar{height:8px;width:8px}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}
+
+/* زجاج */
+.glass,.day-panel,.add-bar,.month-navigation,.month-goals-box,.table-wrapper,details.search,.sticky,.fab,.toast{
+  background:var(--g);border:1px solid var(--gb);box-shadow:var(--hl),var(--shadow);
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+
+/* الرأس */
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.top h2{font-size:1.5rem;font-weight:600}
+#days-left-txt{color:var(--muted);font-size:.9rem}
+.progress-bar-bg{height:3px;background:rgba(255,255,255,.09);border-radius:3px;margin:12px 0 30px;overflow:hidden}
+.progress-bar-fill{height:100%;width:0;background:rgba(255,255,255,.7);transition:width 1.2s ease;border-radius:3px;font-size:0;color:transparent}
+
+/* الديدلاينات */
+.notes-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.notes-head span{font-weight:500;color:var(--muted);font-size:.95rem}
+.sticky-board{display:flex;flex-wrap:wrap;gap:22px;padding:16px 4px 10px}
+.sticky-empty{color:var(--faint);padding:8px 2px;font-size:.92rem}
+.sticky{position:relative;width:188px;min-height:156px;padding:24px 16px 14px;cursor:pointer;border-radius:18px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  background:linear-gradient(160deg,rgba(255,255,255,.10),rgba(255,255,255,.035));
+  transition:transform .22s ease,border-color .22s}
+.sticky:hover{transform:translateY(-4px);border-color:var(--gb2)}
+.sticky::before{content:'';position:absolute;top:-8px;left:50%;width:58px;height:16px;margin-left:-29px;transform:rotate(-2deg);
+  background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.12);border-radius:3px}
+.sticky.urgent{background:linear-gradient(160deg,rgba(236,170,163,.17),rgba(236,170,163,.05));border-color:rgba(236,170,163,.38)}
+.sticky.urgent .sticky-left{color:var(--warm)}
+.sticky.past{opacity:.42}
+.sticky-name{font-family:var(--hand);font-size:1.38rem;font-weight:700;line-height:1.35;word-break:break-word}
+.sticky-date{font-size:.8rem;color:var(--muted);margin-top:2px}
+.sticky-left{font-weight:600;font-size:2.5rem;line-height:1;margin-top:12px;font-variant-numeric:tabular-nums}
+.sticky-left small{font-size:.9rem;font-weight:500;margin-right:6px;color:var(--muted)}
+.sticky-x{position:absolute;top:8px;left:10px;border:none;background:rgba(255,255,255,.10);color:var(--text);width:20px;height:20px;border-radius:50%;font-size:.9rem;line-height:1;cursor:pointer;opacity:0;transition:opacity .15s}
+.sticky:hover .sticky-x,.sticky-x:focus-visible{opacity:1}
+
+/* الإضافة والبحث */
+.add-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:22px 0 14px;padding:10px 14px;border-radius:16px}
+.add-bar b{font-weight:500;color:var(--muted);font-size:.92rem;margin-left:4px}
+.inp{background:rgba(255,255,255,.06);border:1px solid var(--gb);border-radius:10px;padding:6px 12px;font-size:.92rem}
+.inp::placeholder{color:var(--faint)}
+.inp:focus{outline:none;border-color:var(--gb2);background:rgba(255,255,255,.09)}
+.inp option{background:#1a1d22}
+.btn{background:rgba(255,255,255,.14);color:var(--text);border:1px solid var(--gb2);border-radius:10px;padding:6px 18px;font-weight:500;cursor:pointer;box-shadow:var(--hl)}
+.btn:hover{background:rgba(255,255,255,.20)}
+.btn-ghost{background:transparent;box-shadow:none;border-color:var(--gb)}
+details.search{margin-bottom:20px;padding:10px 16px;border-radius:16px}
+details.search summary{cursor:pointer;color:var(--muted);font-size:.92rem;width:max-content}
+.search-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.search-row .inp{flex:1;min-width:200px}
+.search-results{display:none;margin-top:10px}
+.search-results.active{display:block}
+.search-result-item{padding:8px 12px;margin-bottom:6px;background:rgba(255,255,255,.05);border-radius:10px;cursor:pointer}
+.search-result-month{font-size:.8rem;color:var(--muted)}
+.search-result-text{font-size:.9rem}
+.search-highlight{background:rgba(255,255,255,.2);padding:0 3px;border-radius:3px}
+.no-results{color:var(--muted);padding:10px}
+
+/* التنقل */
+.month-navigation{display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:6px 8px;border-radius:16px}
+.month-tabs{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none}
+.month-tabs::-webkit-scrollbar{display:none}
+.month-tab{background:none;border:none;color:var(--muted);padding:6px 13px;cursor:pointer;white-space:nowrap;font-size:.92rem;border-radius:10px}
+.month-tab:hover{color:var(--text)}
+.month-tab.active{color:var(--text);background:rgba(255,255,255,.12);font-weight:500}
+.nav-btn{background:rgba(255,255,255,.06);border:1px solid var(--gb);width:34px;height:34px;border-radius:10px;cursor:pointer;flex-shrink:0}
+.nav-btn:hover:not(:disabled){background:rgba(255,255,255,.12)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* الشهر */
+.month-page{display:none}
+.month-page.active{display:block}
+.month-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+h1{font-size:2.6rem;font-weight:600;line-height:1.2}
+h1 small{font-size:1.05rem;font-weight:400;color:var(--muted);margin-right:10px}
+.quote-box{color:var(--muted);font-size:.92rem;margin-bottom:22px}
+.quote-author::before{content:' — '}
+.month-goals-box{border-radius:16px;padding:14px 16px;margin-bottom:20px}
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:500}
+.btn-add{background:rgba(255,255,255,.06);border:1px solid var(--gb);color:var(--text);border-radius:10px;padding:3px 14px;cursor:pointer;font-size:.88rem}
+.btn-add:hover{background:rgba(255,255,255,.12)}
+
+/* الجدول */
+.table-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:20px}
+table{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;min-width:980px;background:transparent}
+th{color:var(--muted);padding:11px;font-weight:500;font-size:.88rem;border-bottom:1px solid var(--gb)}
+td{border-bottom:1px solid rgba(255,255,255,.06);border-left:1px solid rgba(255,255,255,.06);vertical-align:top;height:152px;padding:8px;background:transparent}
+tr:last-child td{border-bottom:none}
+td:last-child{border-left:none}
+td.empty-cell{background:rgba(0,0,0,.18)}
+td.rest{background:rgba(0,0,0,.10)}
+td.week-cell{background:rgba(255,255,255,.035);border-right:1px solid var(--gb)}
+.week-label{font-weight:500;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.day-header{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;margin-bottom:6px}
+.day-number{font-weight:500;font-size:.95rem;cursor:pointer;user-select:none;min-width:26px;height:26px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-variant-numeric:tabular-nums}
+.day-number:hover{background:rgba(255,255,255,.10)}
+td.day-completed>*{opacity:.2;transition:opacity .2s}
+td.day-completed:hover>*{opacity:.85}
+td.day-current{background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+td.day-current .day-number{background:var(--text);color:#101216}
+.event-badge{font-size:.76rem;background:rgba(255,255,255,.10);color:var(--text);padding:1px 9px;border-radius:99px;flex-grow:1;font-weight:400}
+.user-event-badge{background:rgba(255,255,255,.10)}
+.dl-slot{display:flex;flex-direction:column;gap:3px;margin-bottom:4px}
+.mini-sticky{font-size:.76rem;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.16);padding:1px 9px;border-radius:8px;font-weight:500}
+.mini-sticky.urgent{background:rgba(236,170,163,.20);border-color:rgba(236,170,163,.45);color:#f6cfcb}
+
+.drop-zone{min-height:28px;border-radius:8px;transition:background .15s}
+.drag-over{background:rgba(255,255,255,.08) !important;outline:1px dashed var(--gb2)}
+.task-item{--kc:var(--faint);position:relative;display:flex;align-items:center;gap:5px;padding:3px 8px;margin-bottom:3px;border-radius:9px;font-size:.84rem;
+  background:rgba(255,255,255,.06);border-right:2px solid var(--kc)}
+.task-item[data-kind=work]{--kc:var(--k-work)}
+.task-item[data-kind=project]{--kc:var(--k-project)}
+.task-item[data-kind=content]{--kc:var(--k-content)}
+.task-item[data-kind=lecture]{--kc:var(--k-lecture)}
+.task-item[data-kind=uni]{--kc:var(--k-uni)}
+.task-item:has(input:checked) .task-text{text-decoration:line-through;opacity:.4}
+.drag-handle,.task-delete{position:absolute;top:50%;transform:translateY(-50%);opacity:0;transition:opacity .15s;background:#23272d;border-radius:5px;padding:0 3px}
+.task-delete{left:3px}
+.drag-handle{left:22px}
+.task-item:hover .drag-handle,.task-item:hover .task-delete,.task-delete:focus-visible{opacity:.95}
+.drag-handle{cursor:grab;color:var(--muted);user-select:none;font-size:.8rem}
+.task-item input[type=checkbox]{appearance:none;-webkit-appearance:none;width:13px;height:13px;border:1.5px solid rgba(255,255,255,.4);border-radius:50%;cursor:pointer;flex-shrink:0;background:transparent}
+.task-item input[type=checkbox]:checked{background:rgba(255,255,255,.7);border-color:transparent}
+.task-text{flex-grow:1;outline:none;padding:0 2px;line-height:1.45}
+.task-text:focus{background:rgba(255,255,255,.07);border-radius:4px}
+.task-text:empty:before{content:attr(placeholder);color:var(--faint)}
+.task-delete{color:var(--muted);cursor:pointer;border:none;font-size:1rem;line-height:1.2}
+.task-delete:hover{color:var(--warm)}
+.free-note{min-height:22px;font-size:.82rem;color:var(--muted);outline:none;border-top:1px solid rgba(255,255,255,.07);margin-top:5px;padding-top:3px;white-space:pre-wrap}
+.free-note:focus{border-top-color:var(--gb2)}
+.free-note:empty:before{content:attr(placeholder);color:var(--faint)}
+
+.link{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.92rem;padding:4px 6px;border-radius:8px}
+.link:hover{color:var(--text);background:rgba(255,255,255,.08)}
+/* لوحة اليوم */
+.day-panel{margin:22px 0 14px;padding:18px 20px;border-radius:20px}
+.dp-head{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.dp-nav{display:flex;gap:6px}
+.dp-title{flex:1;min-width:160px}
+.dp-title h3{font-size:1.5rem;font-weight:600;line-height:1.3}
+.dp-title span{color:var(--muted);font-size:.9rem}
+.dp-actions{display:flex;align-items:center;gap:10px}
+.dp-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.dp-meta:empty{display:none}
+.dp-tasks{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px;margin:14px 0 10px}
+.dp-task{--kc:var(--faint);display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;font-size:.98rem;cursor:pointer;
+  background:rgba(255,255,255,.06);border-right:2px solid var(--kc);transition:background .15s}
+.dp-task:hover{background:rgba(255,255,255,.09)}
+.dp-task[data-kind=work]{--kc:var(--k-work)}
+.dp-task[data-kind=project]{--kc:var(--k-project)}
+.dp-task[data-kind=content]{--kc:var(--k-content)}
+.dp-task[data-kind=lecture]{--kc:var(--k-lecture)}
+.dp-task[data-kind=uni]{--kc:var(--k-uni)}
+.dp-task input{appearance:none;-webkit-appearance:none;width:18px;height:18px;border:1.5px solid rgba(255,255,255,.4);border-radius:50%;cursor:pointer;flex-shrink:0;background:transparent}
+.dp-task input:checked{background:rgba(255,255,255,.7);border-color:transparent}
+.dp-task span{flex:1}
+.dp-task.done span{text-decoration:line-through;opacity:.4}
+.dp-task button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;opacity:0;transition:opacity .15s}
+.dp-task:hover button,.dp-task button:focus-visible{opacity:1}
+.dp-task button:hover{color:var(--warm)}
+.dp-empty{color:var(--faint);padding:8px 2px;grid-column:1/-1}
+.dp-count{color:var(--muted);font-size:.85rem}
+.dp-add{display:flex;gap:8px;margin-bottom:6px}
+.dp-add .inp{flex:1;min-width:0}
+td.day-selected{box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+td.day-current.day-selected{box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
+td[data-date]{cursor:pointer}
+
+/* منبه المحاضرات */
+.alarm-ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:.88rem}
+.alarm-ctl .inp{padding:2px 8px;font-size:.88rem;margin:0 2px}
+.alarm-ctl .link.off{color:var(--faint)}
+.sticky.lec{background:linear-gradient(160deg,rgba(151,179,163,.17),rgba(151,179,163,.05));border-color:rgba(151,179,163,.38)}
+.sticky.lec.soon{background:linear-gradient(160deg,rgba(236,170,163,.17),rgba(236,170,163,.05));border-color:rgba(236,170,163,.45)}
+.sticky.lec.soon .sticky-left{color:var(--warm)}
+.sticky.lec.ringing{border-color:rgba(255,255,255,.6)}
+.sticky.lec .sticky-date{color:var(--text);opacity:.8}
+
+.alarm-banner{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:3000;display:none;align-items:center;gap:18px;
+  padding:12px 14px 12px 20px;border-radius:16px;font-weight:500;max-width:92vw;
+  background:rgba(40,30,32,.78);border:1px solid rgba(236,170,163,.55);box-shadow:var(--hl),0 18px 44px rgba(0,0,0,.5);
+  -webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur)}
+.alarm-banner.show{display:flex}
+.alarm-banner .btn{white-space:nowrap}
+.links{margin:6px 0 2px;color:var(--muted);font-size:.9rem}
+.links summary{cursor:pointer;width:max-content}
+.links-row{display:flex;gap:10px;align-items:center;margin-top:8px}
+.links-row label{min-width:150px;color:var(--text)}
+.links-row input{flex:1;min-width:0;direction:ltr;text-align:left}
+.auto-open{display:flex;gap:8px;align-items:center;margin-top:12px;cursor:pointer}
+.join{display:inline-block;margin-top:6px;font-size:.82rem;font-family:var(--font);padding:2px 12px;border-radius:99px;background:rgba(255,255,255,.14);border:1px solid var(--gb2);color:var(--text);text-decoration:none;cursor:pointer}
+.join:hover{background:rgba(255,255,255,.22)}
+.dp-task .join{margin:0}
+.alarm-banner a.btn{text-decoration:none}
+.alarm-banner a.btn[hidden]{display:none}
+.fab-container{position:fixed;bottom:18px;left:18px;display:flex;gap:8px;z-index:1000}
+.fab{color:var(--muted);border-radius:12px;padding:6px 14px;font-size:.85rem;cursor:pointer}
+.fab:hover{color:var(--text);border-color:var(--gb2)}
+.toast{position:fixed;bottom:64px;left:50%;transform:translateX(-50%);padding:8px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:2000;font-size:.9rem}
+.toast.show{opacity:1}
+
+@media print{
+  body{background:#fff;color:#000;padding:0}
+  .top,.progress-bar-bg,.notes,.day-panel,.add-bar,.fab-container,.month-navigation,.search{display:none!important}
+  .month-page{display:block!important;page-break-after:always}
+  .table-wrapper{background:#fff;border:none;box-shadow:none}
+  td,th,.task-item{background:#fff!important;color:#000!important}
+}
+@media (max-width:768px){
+  body{padding:14px 10px 90px}
+  h1{font-size:2rem}
+  .sticky{width:calc(50% - 12px);min-height:136px}
+  .sticky-name{font-size:1.15rem}
+  .sticky-left{font-size:2rem}
+  .add-bar .inp,.add-bar .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ===== صفحة الشغل (إضافة، بنفس تصميم الرزنامة) ===== */
+#work-view{display:none}
+body.work-open>.wrap{display:none}
+body.work-open #work-view{display:block}
+#work-view .w-wrap{max-width:1100px;margin:0 auto}
+.top-left{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.wl-actions{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 22px}
+.wl-card{background:var(--g);border:1px solid var(--gb);box-shadow:var(--hl),var(--shadow);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-radius:20px;padding:16px 20px;margin-bottom:20px}
+.wl-title{font-weight:500;color:var(--muted);font-size:.95rem;margin-bottom:12px}
+.wl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:12px}
+.wl-fg label{display:block;font-size:.82rem;color:var(--muted);margin-bottom:4px}
+.wl-fg .inp{width:100%}
+.wl-fg textarea.inp{resize:vertical;min-height:72px;display:block}
+.wl-form-end{display:flex;justify-content:flex-start;margin-top:12px}
+.wl-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.wl-chip{background:var(--g2);border:1px solid var(--gb);border-radius:99px;padding:3px 14px;font-size:.88rem;color:var(--muted)}
+.wl-chip b{color:var(--text);font-weight:600;margin-right:6px;font-variant-numeric:tabular-nums}
+#work-view .table-wrapper{padding:0}
+#work-view table{min-width:0;table-layout:auto;width:100%}
+#work-view th{text-align:right;padding:12px 14px}
+#work-view td{height:auto;vertical-align:middle;padding:11px 14px;text-align:right;border-left:none;border-bottom:1px solid rgba(255,255,255,.06);font-size:.92rem;background:transparent}
+#work-view tr:hover td{background:rgba(255,255,255,.03)}
+#work-view tr.wl-total td{background:rgba(255,255,255,.06);font-weight:600}
+#work-view tr:last-child td{border-bottom:none}
+#work-view .wl-muted{color:var(--muted)}
+#work-view .wl-num{font-variant-numeric:tabular-nums;white-space:nowrap}
+#work-view .wl-empty{text-align:center;color:var(--faint);padding:26px}
+#work-view .wl-del{color:var(--muted)}
+#work-view .wl-del:hover{color:var(--warm)}
+@media (max-width:768px){#work-view .w-wrap{padding:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="top-left">
+      <h2>مخطط 2026</h2>
+      <span id="days-left-txt"></span>
+    </div>
+    <button class="btn" id="open-work" onclick="openWork()">سجل الشغل</button>
+  </div>
+  <div class="progress-bar-bg"><div id="year-progress" class="progress-bar-fill">0%</div></div>
+
+  <section class="notes">
+    <div class="notes-head">
+      <span>الديدلاينات والمحاضرات</span>
+      <div class="alarm-ctl">
+        <button class="link" id="alarm-toggle" aria-pressed="true">منبه المحاضرات: مفعّل</button>
+        <label>قبل <select id="alarm-lead" class="inp" aria-label="مدة التنبيه قبل المحاضرة">
+          <option value="5">5</option><option value="10">10</option><option value="15">15</option><option value="30">30</option><option value="45">45</option>
+        </select> دقيقة</label>
+        <button class="link" id="alarm-test">جرّب الصوت</button>
+      </div>
+    </div>
+    <details class="links" id="links-box">
+      <summary>روابط المحاضرات</summary>
+      <div id="links-list"></div>
+      <label class="auto-open"><input type="checkbox" id="auto-open"> افتح الرابط تلقائياً لما تبدأ المحاضرة</label>
+    </details>
+    <div class="sticky-board">
+      <div id="lec-slot" style="display:contents"></div>
+      <div id="sticky-board" style="display:contents"></div>
+    </div>
+  </section>
+
+  <section class="day-panel" id="day-panel" aria-label="اليوم">
+    <div class="dp-head">
+      <div class="dp-nav">
+        <button class="nav-btn" id="dp-prev" aria-label="اليوم السابق">→</button>
+        <button class="nav-btn" id="dp-next" aria-label="اليوم التالي">←</button>
+      </div>
+      <div class="dp-title"><h3 id="dp-title"></h3><span id="dp-sub"></span></div>
+      <div class="dp-actions">
+        <button class="link" id="dp-today">اليوم</button>
+        <button class="btn-add" id="dp-done">شطب اليوم</button>
+      </div>
+    </div>
+    <div class="dp-meta" id="dp-meta"></div>
+    <div class="dp-tasks" id="dp-tasks"></div>
+    <div class="dp-add">
+      <input type="text" id="dp-input" class="inp" placeholder="أضف مهمة لهذا اليوم">
+      <button class="btn" id="dp-add-btn">إضافة</button>
+    </div>
+    <div id="dp-note" class="free-note" contenteditable="true" placeholder="ملاحظة لهذا اليوم"></div>
+  </section>
+
+  <div class="add-bar">
+    <b>إضافة</b>
+    <select id="add-type" class="inp" aria-label="النوع">
+      <option value="deadline">ديدلاين</option>
+      <option value="event">حدث أو امتحان</option>
+    </select>
+    <select id="add-month" class="inp" aria-label="الشهر"></select>
+    <input type="number" id="add-day" class="inp" placeholder="اليوم" min="1" max="31" style="width:84px">
+    <input type="text" id="add-text" class="inp" placeholder="الاسم" style="flex:1;min-width:160px">
+    <button class="btn" onclick="addItem()">إضافة</button>
+  </div>
+
+  <div class="month-navigation">
+    <button class="nav-btn" id="prev-month" onclick="navigateMonth(-1)" aria-label="الشهر السابق">→</button>
+    <div class="month-tabs" id="month-tabs"></div>
+    <button class="nav-btn" id="next-month" onclick="navigateMonth(1)" aria-label="الشهر التالي">←</button>
+  </div>
+
+  <details class="search">
+    <summary>بحث</summary>
+    <div class="search-row">
+      <input type="text" id="search-input" class="inp" placeholder="ابحث عن مهمة أو ملاحظة أو حدث">
+      <button class="btn" onclick="performSearch()">بحث</button>
+      <button class="btn btn-ghost" onclick="clearSearch()">مسح</button>
+    </div>
+    <div id="search-results" class="search-results"></div>
+  </details>
+
+  <div id="calendar-root"></div>
+</div>
+
+
+<div id="work-view" aria-label="سجل الشغل">
+  <div class="w-wrap">
+    <div class="top">
+      <div class="top-left"><h2>سجل الشغل</h2><span id="wl-sub"></span></div>
+    </div>
+    <div class="progress-bar-bg"></div>
+
+    <div class="wl-actions">
+      <button class="btn" onclick="closeWork()">→ الرزنامة</button>
+      <button class="btn btn-ghost" onclick="workExport()">تصدير تقرير (PDF / طباعة)</button>
+      <button class="btn btn-ghost" onclick="workClear()">مسح الكل</button>
+    </div>
+
+    <div class="wl-chips" id="wl-chips"></div>
+
+    <section class="wl-card">
+      <div class="wl-title">إضافة سجل</div>
+      <form onsubmit="workAdd(event)">
+        <div class="wl-grid">
+          <div class="wl-fg"><label for="wl-date">التاريخ</label><input type="date" id="wl-date" class="inp" required></div>
+          <div class="wl-fg"><label for="wl-name">المهمة / الوصف</label><input type="text" id="wl-name" class="inp" placeholder="مثال: إعداد الـ API" required></div>
+          <div class="wl-fg"><label for="wl-hours">الساعات</label><input type="number" id="wl-hours" class="inp" step="0.25" min="0.25" placeholder="مثال: 4.5" required></div>
+        </div>
+        <div class="wl-fg"><label for="wl-notes">ملاحظات</label><textarea id="wl-notes" class="inp" placeholder="تفاصيل إضافية، روابط، إلخ"></textarea></div>
+        <div class="wl-form-end"><button type="submit" class="btn">+ إضافة</button></div>
+      </form>
+    </section>
+
+    <div class="table-wrapper">
+      <table>
+        <thead><tr><th>التاريخ</th><th>اليوم</th><th>المهمة</th><th>الساعات</th><th>ملاحظات</th><th></th></tr></thead>
+        <tbody id="wl-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="fab-container">
+  <button class="fab" onclick="downloadFile()">حفظ نسخة</button>
+  <button class="fab" onclick="resetAll()">مسح كل البيانات</button>
+</div>
+<div class="alarm-banner" id="alarm-banner" role="alert"><span id="alarm-msg"></span><a class="btn" id="alarm-join" target="_blank" rel="noopener" hidden>انضم للمحاضرة</a><button class="btn btn-ghost" id="alarm-stop">إيقاف المنبه</button></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+var dpDate = null;
+// ================= البيانات الأساسية =================
+const months2026 = [
+  {ar:"يناير", en:"January", days:31, startDay:4},
+  {ar:"فبراير", en:"February", days:28, startDay:0},
+  {ar:"مارس", en:"March", days:31, startDay:0},
+  {ar:"أبريل", en:"April", days:30, startDay:3},
+  {ar:"مايو", en:"May", days:31, startDay:5},
+  {ar:"يونيو", en:"June", days:30, startDay:1},
+  {ar:"يوليو", en:"July", days:31, startDay:3},
+  {ar:"أغسطس", en:"August", days:31, startDay:6},
+  {ar:"سبتمبر", en:"September", days:30, startDay:2},
+  {ar:"أكتوبر", en:"October", days:31, startDay:4},
+  {ar:"نوفمبر", en:"November", days:30, startDay:0},
+  {ar:"ديسمبر", en:"December", days:31, startDay:2}
+];
+const arMonth = i => months2026[i].ar;
+
+const monthQuotes = [
+  {text:"النجاح هو حصيلة الاستعدادات الصغيرة المتكررة يوماً بعد يوم", author:"روبرت كولير"},
+  {text:"ابدأ من حيث أنت. استخدم ما لديك. افعل ما تستطيع", author:"آرثر آش"},
+  {text:"الطريقة الوحيدة للقيام بعمل عظيم هي أن تحب ما تفعل", author:"ستيف جوبز"},
+  {text:"لا تشاهد الساعة؛ افعل ما تفعله. استمر في المضي قدماً", author:"سام ليفنسون"},
+  {text:"الانضباط هو الجسر بين الأهداف والإنجاز", author:"جيم رون"},
+  {text:"التركيز هو مفتاح الإنتاجية", author:"بريان تريسي"},
+  {text:"النجاح ليس نهائياً، والفشل ليس قاتلاً: إنها الشجاعة على الاستمرار هي المهمة", author:"ونستون تشرشل"},
+  {text:"القوة لا تأتي من القدرة البدنية. إنها تأتي من الإرادة التي لا تقهر", author:"المهاتما غاندي"},
+  {text:"التحفيز هو ما يجعلك تبدأ. العادة هي ما تجعلك مستمراً", author:"جيم ريون"},
+  {text:"الإنجازات العظيمة تتطلب وقتاً", author:"مثل شعبي"},
+  {text:"الامتنان يحول ما لدينا إلى ما يكفي", author:"ميلودي بيتي"},
+  {text:"أفضل وقت لزرع شجرة كان قبل 20 سنة. ثاني أفضل وقت هو الآن", author:"مثل صيني"}
+];
+
+const initialEvents = { "1-1":"رأس السنة الميلادية" };
+
+// ================= الروتين الأسبوعي (يتحول لمهام فعلية) =================
+// getDay(): 0=أحد 1=اثنين 2=ثلاثاء 3=أربعاء 4=خميس 5=جمعة 6=سبت
+const SEED_START = new Date(2026, 9, 12); // 12 أكتوبر 2026
+const T_WORK    = "دوام 8 ساعات";
+const T_NIGHT   = "شغل بالليل";
+const T_PROJECT = "مشروع التخرج 2-3 ساعات";
+const T_PROJECT1= "مشروع التخرج ساعة";
+const T_CONTENT = "محتوى ساعة";
+const T_CONTENT1= "محتوى";
+const T_UNI  = "دوام جامعة";
+const L_NAT  = "17:30 التربية الوطنية";     // الثلاثاء فقط
+const L_ARAB = "17:30 الاتصال والتواصل";    // الاثنين فقط
+const L_MIL  = "19:00 العلوم العسكرية";     // الاثنين والأربعاء
+
+const WEEK_PLAN = {
+  0: [T_WORK, T_PROJECT, T_CONTENT],                          // الأحد
+  1: [T_UNI, L_ARAB, L_MIL, T_NIGHT, T_PROJECT1, T_CONTENT1], // الاثنين
+  2: [T_WORK, L_NAT, T_PROJECT, T_CONTENT],                   // الثلاثاء
+  3: [T_UNI, L_MIL, T_NIGHT, T_PROJECT1, T_CONTENT1],         // الأربعاء
+  4: [T_WORK, T_PROJECT, T_CONTENT],                          // الخميس
+  5: [], 6: []                                                // الجمعة والسبت فاضيين
+};
+
+// تحديث الجدول القديم: يستبدل الأيام اللي ما عدّلتها بإيدك
+const SEED_VER = 'v4';
+const norm = t => String(t).replace(/️/g, '');
+const OLD_SEED_TEXTS = [
+  "💼 دوام – 8 ساعات","🎓 التربية الوطنية 17:30–19:00","🛠️ مشروع التخرج – 2 إلى 3 ساعات","✍️ أفكار المحتوى – ساعة",
+  "🎓 الاتصال والتواصل باللغة العربية 17:30–19:00","🎓 العلوم العسكرية 19:00–20:30","💼 شغل بالليل (بعد المحاضرات)",
+  "🛠️ مشروع التخرج – ساعة (إذا ضل وقت)","✍️ أفكار المحتوى (إذا ضل وقت)",
+  "💼 دوام 8 ساعات","💼 شغل (ليل)","🛠️ مشروع التخرج 2-3 ساعات","🛠️ مشروع التخرج ساعة","✍️ محتوى ساعة","✍️ محتوى",
+  "🏫 دوام جامعة","🎓 التربية الوطنية 17:30","🎓 الاتصال والتواصل 17:30","🎓 العلوم العسكرية 19:00"
+].map(norm);
+if (localStorage.getItem('SEED_VER') !== SEED_VER) {
+  Object.keys(localStorage).filter(k => /^LIST_list-\d+-\d+$/.test(k)).forEach(k => {
+    try {
+      const arr = JSON.parse(localStorage.getItem(k));
+      if (arr.every(x => !x.c && OLD_SEED_TEXTS.includes(norm(x.t)))) localStorage.removeItem(k);
+    } catch (e) {}
+  });
+  localStorage.setItem('SEED_VER', SEED_VER);
+}
+
+function seedDay(m, d) {
+  const key = `LIST_list-${m}-${d}`;
+  if (localStorage.getItem(key) !== null) return;
+  const date = new Date(2026, m - 1, d);
+  if (date < SEED_START) return;
+  const plan = WEEK_PLAN[date.getDay()] || [];
+  if (!plan.length) return;
+  localStorage.setItem(key, JSON.stringify(plan.map(t => ({t, c:false}))));
+}
+
+// ================= التقويم =================
+function renderCalendar() {
+  const root = document.getElementById('calendar-root');
+  let html = '';
+  months2026.forEach((month, mIndex) => {
+    const actualMonth = mIndex + 1;
+    const rows = Math.ceil((month.days + month.startDay) / 7);
+    let dayCount = 1;
+    html += `<div class="month-page" data-month="${mIndex}">
+      <div class="month-head"><h1>${month.ar}<small>${month.en} 2026</small></h1></div>
+      <div class="quote-box"><span class="quote-text">${monthQuotes[mIndex].text}</span><span class="quote-author">${monthQuotes[mIndex].author}</span></div>
+      <div class="month-goals-box">
+        <div class="section-header"><span>أهداف الشهر</span>
+          <button class="btn-add" onclick="addNewTask('month-goals-${mIndex}')">+ مهمة</button></div>
+        <div id="month-goals-${mIndex}" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+      </div>
+      <div class="table-wrapper"><table><thead><tr>
+        <th>الأحد</th><th>الاثنين</th><th>الثلاثاء</th><th>الأربعاء</th><th>الخميس</th><th>الجمعة</th><th>السبت</th><th>الأسبوع</th>
+      </tr></thead><tbody>`;
+    for (let r = 0; r < rows; r++) {
+      html += `<tr>`;
+      for (let c = 0; c < 7; c++) {
+        const slot = r * 7 + c;
+        if (slot < month.startDay || dayCount > month.days) {
+          html += `<td class="empty-cell"></td>`;
+        } else {
+          const dateKey = `${actualMonth}-${dayCount}`;
+          const eventId = `evt-${dateKey}`, noteId = `note-${dateKey}`, listId = `list-${dateKey}`;
+          const savedEvt = localStorage.getItem(eventId);
+          const defaultEvt = initialEvents[dateKey] || "";
+          const finalEvt = savedEvt !== null ? savedEvt : defaultEvt;
+          const badgeClass = (savedEvt && !initialEvents[dateKey]) ? "event-badge user-event-badge" : "event-badge";
+          seedDay(actualMonth, dayCount);
+          html += `<td data-date="${dateKey}"${c >= 5 ? ' class="rest"' : ''}>
+            <div class="day-header">
+              <span class="day-number" onclick="toggleDayComplete('${dateKey}')" title="اضغط لشطب اليوم">${dayCount}</span>
+              <div id="${eventId}" class="${badgeClass}" contenteditable="true" style="display:${finalEvt ? 'inline-block' : 'none'}"
+                   oninput="saveContent(this.id)" onblur="if(!this.innerText.trim())this.style.display='none'">${finalEvt}</div>
+            </div>
+            <div class="dl-slot" id="dl-${dateKey}"></div>
+            <div id="${listId}" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            <div id="${noteId}" class="free-note" contenteditable="true" placeholder="ملاحظة" oninput="saveContent(this.id)"></div>
+          </td>`;
+          dayCount++;
+        }
+      }
+      html += `<td class="week-cell">
+          <div class="week-label">الأسبوع ${r + 1}</div>
+          <div id="week-list-${mIndex}-${r}" class="drop-zone" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+          <div id="week-note-${mIndex}-${r}" class="free-note" contenteditable="true" placeholder="ملاحظة" oninput="saveContent(this.id)"></div>
+        </td></tr>`;
+    }
+    html += `</tbody></table></div></div>`;
+  });
+  root.innerHTML = html;
+  restoreData();
+  calcProgress();
+}
+
+// ================= المهام =================
+function kindOf(t) {
+  t = (t || '').replace(/^[^؀-ۿ0-9A-Za-z]+/, '').trim();
+  if (/^\d{1,2}:\d{2}/.test(t)) return 'lecture';
+  if (t.startsWith('دوام جامعة')) return 'uni';
+  if (t.startsWith('دوام') || t.startsWith('شغل')) return 'work';
+  if (t.startsWith('مشروع')) return 'project';
+  if (t.startsWith('محتوى') || t.startsWith('أفكار')) return 'content';
+  return '';
+}
+
+window.allowDrop = ev => { ev.preventDefault(); ev.currentTarget.classList.add('drag-over'); };
+document.addEventListener('dragleave', ev => {
+  if (ev.target.classList && ev.target.classList.contains('drop-zone')) ev.target.classList.remove('drag-over');
+});
+window.dragStart = ev => {
+  ev.dataTransfer.setData("text", ev.target.parentElement.querySelector('.task-text').innerText);
+};
+window.drop = ev => {
+  ev.preventDefault();
+  ev.currentTarget.classList.remove('drag-over');
+  const data = ev.dataTransfer.getData("text");
+  if (data) {
+    const id = ev.currentTarget.id;
+    if (isDuplicate(id, data)) { toast("موجودة مسبقاً"); return; }
+    createTask(id, data);
+    saveTasks(id);
+  }
+};
+
+function isDuplicate(containerId, newText, ignoreEl = null) {
+  let dup = false;
+  document.getElementById(containerId).querySelectorAll('.task-text').forEach(t => {
+    if (t !== ignoreEl && t.innerText.trim() === newText.trim()) dup = true;
+  });
+  return dup;
+}
+
+window.addNewTask = id => { createTask(id, ""); saveTasks(id); };
+
+function createTask(containerId, text, checked = false) {
+  const div = document.createElement('div');
+  div.className = 'task-item';
+  div.dataset.kind = kindOf(text);
+  div.innerHTML = `
+    <span class="drag-handle" draggable="true" ondragstart="dragStart(event)">⋮⋮</span>
+    <input type="checkbox" ${checked ? 'checked' : ''} aria-label="تم">
+    <div class="task-text" contenteditable="true" placeholder="اكتب المهمة"></div>
+    <button class="task-delete" aria-label="حذف">×</button>`;
+  const te = div.querySelector('.task-text');
+  te.textContent = text;
+  div.querySelector('input').addEventListener('change', () => { saveTasks(containerId); refreshPanelFor(containerId); });
+  div.querySelector('.task-delete').addEventListener('click', () => { div.remove(); saveTasks(containerId); refreshPanelFor(containerId); });
+  te.addEventListener('blur', function () {
+    const cur = this.innerText.trim();
+    if (cur === "") { div.remove(); saveTasks(containerId); refreshPanelFor(containerId); return; }
+    if (isDuplicate(containerId, cur, this)) { toast("المهمة مكررة"); div.remove(); }
+    div.dataset.kind = kindOf(cur);
+    saveTasks(containerId);
+    refreshPanelFor(containerId);
+  });
+  te.addEventListener('keypress', function (e) { if (e.key === 'Enter') { e.preventDefault(); this.blur(); } });
+  document.getElementById(containerId).appendChild(div);
+  if (text === "") te.focus();
+}
+
+function saveTasks(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const tasks = [];
+  container.querySelectorAll('.task-item').forEach(el => {
+    const txt = el.querySelector('.task-text').innerText.trim();
+    if (txt) tasks.push({t: txt, c: el.querySelector('input').checked});
+  });
+  localStorage.setItem('LIST_' + containerId, JSON.stringify(tasks));
+}
+
+function saveContent(id) { localStorage.setItem(id, document.getElementById(id).innerText); }
+
+// ================= شطب اليوم =================
+window.toggleDayComplete = function (dateKey) {
+  const cell = document.querySelector(`td[data-date="${dateKey}"]`);
+  const k = `DAY_COMPLETE_${dateKey}`;
+  if (cell.classList.contains('day-completed')) {
+    localStorage.setItem(k, 'false');
+    cell.classList.remove('day-completed');
+  } else {
+    localStorage.setItem(k, 'true');
+    cell.classList.add('day-completed');
+  }
+  if (typeof updateDpDone === 'function') updateDpDone();
+};
+
+function restoreData() {
+  document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+    if (!el.classList.contains('task-text')) {
+      const v = localStorage.getItem(el.id);
+      if (v !== null) el.innerText = v;
+    }
+  });
+  document.querySelectorAll('.drop-zone').forEach(z => {
+    const data = localStorage.getItem('LIST_' + z.id);
+    if (data) JSON.parse(data).forEach(t => createTask(z.id, t.t, t.c));
+  });
+  document.querySelectorAll('td[data-date]').forEach(cell => {
+    if (localStorage.getItem(`DAY_COMPLETE_${cell.dataset.date}`) === 'true') cell.classList.add('day-completed');
+  });
+  markPastDays();
+}
+
+function markPastDays() {
+  const now = new Date();
+  if (now.getFullYear() !== 2026) return;
+  const cm = now.getMonth() + 1, cd = now.getDate();
+  document.querySelectorAll('td[data-date]').forEach(cell => {
+    const [m, d] = cell.dataset.date.split('-').map(Number);
+    if (m === cm && d === cd) { cell.classList.add('day-current'); return; }
+    const past = m < cm || (m === cm && d < cd);
+    if (past && localStorage.getItem(`DAY_COMPLETE_${cell.dataset.date}`) !== 'false') cell.classList.add('day-completed');
+  });
+}
+
+// ================= تقدم السنة =================
+function calcProgress() {
+  const now = new Date();
+  const day = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+  const total = 365;
+  document.getElementById('year-progress').style.width = ((day / total) * 100).toFixed(1) + "%";
+  document.getElementById('days-left-txt').innerText = `مضى ${day} يوم، وباقي ${total - day}`;
+}
+
+// ================= الديدلاينات (ستيكي نوتس) =================
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function getDeadlines() { try { return JSON.parse(localStorage.getItem('DEADLINES') || '[]'); } catch (e) { return []; } }
+function saveDeadlines(a) { localStorage.setItem('DEADLINES', JSON.stringify(a)); }
+function daysUntil(m, d) {
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  return Math.round((new Date(2026, m - 1, d) - t) / 86400000);
+}
+
+function renderDeadlines() {
+  const list = getDeadlines().sort((a, b) => a.m - b.m || a.d - b.d);
+  const board = document.getElementById('sticky-board');
+  if (!list.length) {
+    board.innerHTML = '<div class="sticky-empty">ما في ديدلاينات. أضف واحد من شريط الإضافة تحت.</div>';
+  } else {
+    board.innerHTML = list.map((x, i) => {
+      const left = daysUntil(x.m, x.d);
+      let cls = 'c' + (i % 4), big;
+      if (left < 0) { cls = 'past'; big = 'انتهى'; }
+      else if (left === 0) { cls = 'urgent'; big = 'اليوم'; }
+      else { if (left <= 3) cls = 'urgent'; big = `${left}<small>${left === 1 ? 'يوم' : 'أيام'}</small>`; }
+      return `<div class="sticky ${cls}" onclick="goToDeadline(${x.m},${x.d})">
+        <button class="sticky-x" onclick="event.stopPropagation();deleteDeadline(${x.id})" aria-label="حذف">×</button>
+        <div><div class="sticky-name">${esc(x.t)}</div><div class="sticky-date">${x.d} ${arMonth(x.m - 1)}</div></div>
+        <div class="sticky-left">${big}</div></div>`;
+    }).join('');
+  }
+  document.querySelectorAll('.dl-slot').forEach(s => s.innerHTML = '');
+  list.forEach(x => {
+    const slot = document.getElementById(`dl-${x.m}-${x.d}`);
+    if (!slot) return;
+    const left = daysUntil(x.m, x.d);
+    const el = document.createElement('div');
+    el.className = 'mini-sticky' + (left >= 0 && left <= 3 ? ' urgent' : '');
+    el.textContent = x.t;
+    slot.appendChild(el);
+  });
+}
+function deleteDeadline(id) { saveDeadlines(getDeadlines().filter(x => x.id !== id)); renderDeadlines(); if (dpDate) renderDayPanel(); }
+function goToDeadline(m, d) {
+  goToMonth(m - 1);
+  setTimeout(() => {
+    const c = document.querySelector(`td[data-date="${m}-${d}"]`);
+    if (c) c.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }, 200);
+}
+
+// ================= الإضافة =================
+function addItem() {
+  const type = document.getElementById('add-type').value;
+  const m = parseInt(document.getElementById('add-month').value);
+  const d = parseInt(document.getElementById('add-day').value);
+  const txt = document.getElementById('add-text').value.trim();
+  if (!d || !txt) { toast("اكتب اليوم والاسم"); return; }
+  if (d < 1 || d > months2026[m - 1].days) { toast("اليوم غير صحيح لهذا الشهر"); return; }
+  if (type === 'deadline') {
+    const arr = getDeadlines();
+    arr.push({id: Date.now(), m, d, t: txt});
+    saveDeadlines(arr);
+    renderDeadlines();
+  } else {
+    const id = `evt-${m}-${d}`, el = document.getElementById(id);
+    el.innerText = txt;
+    el.style.display = 'inline-block';
+    el.classList.add('user-event-badge');
+    localStorage.setItem(id, txt);
+  }
+  document.getElementById('add-text').value = '';
+  document.getElementById('add-day').value = '';
+  toast("تمت الإضافة");
+  if (dpDate) renderDayPanel();
+}
+
+// ================= أدوات =================
+let toastTimer;
+function toast(msg, ms) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), ms || 2200);
+}
+window.downloadFile = function () {
+  const blob = new Blob([document.documentElement.outerHTML], {type: 'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'Planner_2026.html';
+  a.click();
+};
+window.resetAll = function () {
+  if (confirm("سيتم حذف كل البيانات ولا يمكن التراجع. متأكد؟")) { localStorage.clear(); location.reload(); }
+};
+
+// ================= التنقل بين الأشهر =================
+let curMonthIdx = 0;
+function createMonthTabs() {
+  document.getElementById('month-tabs').innerHTML = months2026.map((m, i) =>
+    `<button class="month-tab" onclick="goToMonth(${i})">${m.ar}</button>`).join('');
+  document.getElementById('add-month').innerHTML = months2026.map((m, i) =>
+    `<option value="${i + 1}">${m.ar}</option>`).join('');
+}
+function goToMonth(i) {
+  document.querySelectorAll('.month-page').forEach(p => p.classList.remove('active'));
+  const sel = document.querySelector(`.month-page[data-month="${i}"]`);
+  if (!sel) return;
+  sel.classList.add('active');
+  curMonthIdx = i;
+  document.querySelectorAll('.month-tab').forEach((t, idx) => t.classList.toggle('active', idx === i));
+  document.getElementById('prev-month').disabled = i === 0;
+  document.getElementById('next-month').disabled = i === 11;
+  const tab = document.querySelectorAll('.month-tab')[i];
+  if (tab) tab.scrollIntoView({block: 'nearest', inline: 'center'});
+}
+function navigateMonth(dir) {
+  const n = curMonthIdx + dir;
+  if (n >= 0 && n < 12) goToMonth(n);
+}
+
+// ================= لوحة اليوم (مرتبطة بالرزنامة) =================
+const DAY_NAMES = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+function dpIds() {
+  const m = dpDate.getMonth() + 1, d = dpDate.getDate();
+  return {m, d, list:`list-${m}-${d}`, note:`note-${m}-${d}`, evt:`evt-${m}-${d}`, cell:`${m}-${d}`};
+}
+function refreshPanelFor(id) { if (dpDate && id === dpIds().list) renderDayPanel(); }
+function updateDpDone() {
+  if (!dpDate) return;
+  const cell = document.querySelector(`td[data-date="${dpIds().cell}"]`);
+  document.getElementById('dp-done').textContent = cell && cell.classList.contains('day-completed') ? 'إلغاء الشطب' : 'شطب اليوم';
+}
+function renderDayPanel() {
+  const {m, d, list, note, evt} = dpIds();
+  const src = document.getElementById(list);
+  document.getElementById('dp-title').textContent = `${DAY_NAMES[dpDate.getDay()]} ${d} ${arMonth(m - 1)}`;
+  const t0 = new Date(); t0.setHours(0, 0, 0, 0);
+  const diff = Math.round((dpDate - t0) / 86400000);
+  document.getElementById('dp-sub').textContent =
+    diff === 0 ? 'اليوم' : diff === 1 ? 'بكرة' : diff === -1 ? 'أمس' : diff > 1 ? `بعد ${diff} يوم` : `قبل ${-diff} يوم`;
+
+  // الأحداث والديدلاينات
+  const meta = document.getElementById('dp-meta'); meta.innerHTML = '';
+  const evEl = document.getElementById(evt), evTxt = evEl ? evEl.innerText.trim() : '';
+  if (evTxt) { const c = document.createElement('span'); c.className = 'event-badge'; c.style.flexGrow = '0'; c.textContent = evTxt; meta.appendChild(c); }
+  getDeadlines().filter(x => x.m === m && x.d === d).forEach(x => {
+    const c = document.createElement('span'); const left = daysUntil(x.m, x.d);
+    c.className = 'mini-sticky' + (left >= 0 && left <= 3 ? ' urgent' : ''); c.textContent = 'ديدلاين: ' + x.t; meta.appendChild(c);
+  });
+
+  // المهام
+  const box = document.getElementById('dp-tasks'); box.innerHTML = '';
+  const items = Array.from(src.querySelectorAll('.task-item'));
+  if (!items.length) {
+    const e = document.createElement('div'); e.className = 'dp-empty';
+    e.textContent = (dpDate.getDay() >= 5) ? 'يوم فاضي' : 'ما في مهام لهذا اليوم'; box.appendChild(e);
+  }
+  items.forEach(it => {
+    const row = document.createElement('label');
+    row.className = 'dp-task'; row.dataset.kind = it.dataset.kind || '';
+    const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = it.querySelector('input').checked;
+    const tx = document.createElement('span'); tx.textContent = it.querySelector('.task-text').innerText;
+    const del = document.createElement('button'); del.type = 'button'; del.textContent = '×'; del.setAttribute('aria-label', 'حذف');
+    if (cb.checked) row.classList.add('done');
+    cb.addEventListener('change', () => {
+      it.querySelector('input').checked = cb.checked;      // نفس الشطب بالرزنامة
+      row.classList.toggle('done', cb.checked);
+      saveTasks(list);
+    });
+    del.addEventListener('click', e => { e.preventDefault(); it.remove(); saveTasks(list); renderDayPanel(); });
+    const url = getLink(lectureName(tx.textContent));
+    if (url) { const a = document.createElement('a'); a.className = 'join'; a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'انضم'; row.append(cb, tx, a, del); }
+    else row.append(cb, tx, del);
+    box.appendChild(row);
+  });
+  const nEl = document.getElementById(note);
+  const pn = document.getElementById('dp-note');
+  if (document.activeElement !== pn) pn.innerText = nEl ? nEl.innerText : '';
+  updateDpDone();
+}
+function setDay(date, scroll) {
+  const min = new Date(2026, 0, 1), max = new Date(2026, 11, 31);
+  if (date < min) date = min; if (date > max) date = max;
+  dpDate = date;
+  const {m, cell} = dpIds();
+  if (curMonthIdx !== m - 1) goToMonth(m - 1);
+  document.querySelectorAll('td.day-selected').forEach(c => c.classList.remove('day-selected'));
+  const td = document.querySelector(`td[data-date="${cell}"]`); if (td) td.classList.add('day-selected');
+  renderDayPanel();
+  if (scroll) document.getElementById('day-panel').scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+function dpAdd() {
+  const inp = document.getElementById('dp-input'), txt = inp.value.trim();
+  if (!txt) return;
+  const {list} = dpIds();
+  if (isDuplicate(list, txt)) { toast('المهمة موجودة مسبقاً'); return; }
+  createTask(list, txt); saveTasks(list);
+  inp.value = ''; renderDayPanel();
+}
+function initDayPanel() {
+  const now = new Date();
+  const start = now.getFullYear() === 2026 ? new Date(2026, now.getMonth(), now.getDate()) : new Date(2026, 0, 1);
+  const step = n => setDay(new Date(dpDate.getFullYear(), dpDate.getMonth(), dpDate.getDate() + n));
+  document.getElementById('dp-prev').addEventListener('click', () => step(-1));
+  document.getElementById('dp-next').addEventListener('click', () => step(1));
+  document.getElementById('dp-today').addEventListener('click', () => setDay(start));
+  document.getElementById('dp-done').addEventListener('click', () => toggleDayComplete(dpIds().cell));
+  document.getElementById('dp-add-btn').addEventListener('click', dpAdd);
+  document.getElementById('dp-input').addEventListener('keypress', e => { if (e.key === 'Enter') dpAdd(); });
+  document.getElementById('dp-note').addEventListener('input', function () {
+    const {note} = dpIds(); const el = document.getElementById(note);
+    if (el) { el.innerText = this.innerText; saveContent(note); }
+  });
+  document.getElementById('calendar-root').addEventListener('click', e => {
+    const td = e.target.closest('td[data-date]');
+    if (!td || e.target.closest('.task-item,.free-note,.event-badge,.day-number,.dl-slot')) return;
+    const [m, d] = td.dataset.date.split('-').map(Number);
+    setDay(new Date(2026, m - 1, d), true);
+  });
+  setDay(start);
+}
+
+// ================= روابط المحاضرات =================
+const LECTURE_NAMES = ['العلوم العسكرية', 'الاتصال والتواصل', 'التربية الوطنية'];
+const DEFAULT_LINKS = {
+  'العلوم العسكرية': 'https://teams.microsoft.com/l/meetup-join/19%3ameeting_Y2NkYzY2YzItY2RlOS00M2FiLWI2OTEtNmM1ZGY5YzZjMTBi%40thread.v2/0?context=%7b%22Tid%22%3a%228f37fac6-3111-4f3d-ae72-d46205992edc%22%2c%22Oid%22%3a%2296a81229-68cf-48ed-afff-beeeaeeb386c%22%7d'
+};
+function getLinks() { try { return Object.assign({}, DEFAULT_LINKS, JSON.parse(localStorage.getItem('LINKS') || '{}')); } catch (e) { return Object.assign({}, DEFAULT_LINKS); } }
+function validUrl(u) { try { const x = new URL(String(u).trim()); return (x.protocol === 'https:' || x.protocol === 'http:') ? String(u).trim() : ''; } catch (e) { return ''; } }
+function getLink(name) { return validUrl(getLinks()[name] || ''); }
+function lectureName(text) { const m = /^\d{1,2}:\d{2}\s*(.*)$/.exec((text || '').trim()); return m ? (m[1] || '') : ''; }
+function renderLinksUI() {
+  const box = document.getElementById('links-list'), links = getLinks();
+  box.innerHTML = '';
+  LECTURE_NAMES.forEach(n => {
+    const row = document.createElement('div'); row.className = 'links-row';
+    const lb = document.createElement('label'); lb.textContent = n;
+    const inp = document.createElement('input'); inp.type = 'url'; inp.className = 'inp'; inp.placeholder = 'الصق رابط المحاضرة هنا'; inp.value = links[n] || '';
+    inp.setAttribute('aria-label', 'رابط ' + n);
+    inp.addEventListener('change', () => {
+      const v = inp.value.trim();
+      if (v && !validUrl(v)) { toast('الرابط لازم يبدأ بـ https://'); return; }
+      const cur = getLinks(); cur[n] = v; localStorage.setItem('LINKS', JSON.stringify(cur));
+      toast(v ? 'انحفظ الرابط' : 'انمسح الرابط');
+      if (dpDate) renderDayPanel();
+    });
+    row.append(lb, inp); box.appendChild(row);
+  });
+  const ao = document.getElementById('auto-open');
+  ao.checked = getAlarm().autoOpen;
+  ao.onchange = () => { const al = getAlarm(); al.autoOpen = ao.checked; setAlarm(al); };
+}
+
+// ================= منبه المحاضرات =================
+let audioCtx = null;
+function unlockAudio() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  } catch (e) {}
+}
+['click', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, unlockAudio, {passive: true}));
+function ringSound() {
+  unlockAudio();
+  if (!audioCtx) return;
+  const t0 = audioCtx.currentTime;
+  for (let i = 0; i < 8; i++) {
+    const o = audioCtx.createOscillator(), g = audioCtx.createGain(), t = t0 + i * 0.32;
+    o.type = 'sine'; o.frequency.value = i % 2 ? 988 : 784;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.28, t + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t + 0.3);
+  }
+}
+const ALARM_WINDOW_MIN = 120;   // يظهر الكرت قبل المحاضرة بساعتين
+function getAlarm() { const d = {on: true, lead: 15, autoOpen: true}; try { return Object.assign(d, JSON.parse(localStorage.getItem('ALARM') || '{}')); } catch (e) { return d; } }
+function setAlarm(a) { localStorage.setItem('ALARM', JSON.stringify(a)); }
+function getRang() { try { return JSON.parse(localStorage.getItem('RANG') || '[]'); } catch (e) { return []; } }
+function markRang(k) { const a = getRang().slice(-40); a.push(k); localStorage.setItem('RANG', JSON.stringify(a)); }
+function fmtLeft(ms) {
+  const sec = Math.max(0, Math.ceil(ms / 1000));
+  const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, '0')}<small>ساعة</small>`;
+  if (m >= 5) return `${m}<small>دقيقة</small>`;
+  return `${m}:${String(s).padStart(2, '0')}<small>دقيقة</small>`;
+}
+function todayLectures(now) {
+  const m = now.getMonth() + 1, d = now.getDate();
+  if (now.getFullYear() !== 2026) return [];
+  const cell = document.querySelector(`td[data-date="${m}-${d}"]`);
+  if (!cell || cell.classList.contains('day-completed')) return [];
+  const out = [];
+  document.querySelectorAll(`#list-${m}-${d} .task-item`).forEach(it => {
+    const mt = /^(\d{1,2}):(\d{2})\s*(.*)$/.exec(it.querySelector('.task-text').innerText.trim());
+    if (!mt || it.querySelector('input').checked) return;
+    out.push({start: new Date(2026, m - 1, d, +mt[1], +mt[2]), time: `${mt[1]}:${mt[2]}`, name: mt[3] || 'محاضرة', key: `${m}-${d}-${mt[1]}:${mt[2]}`});
+  });
+  return out.sort((a, b) => a.start - b.start);
+}
+let ringingUntil = 0;
+function alarmTick() {
+  const now = new Date(), al = getAlarm(), leadMs = al.lead * 60000;
+  const slot = document.getElementById('lec-slot');
+  const near = todayLectures(now).filter(l => l.start - now > 0 && l.start - now <= ALARM_WINDOW_MIN * 60000);
+  const rang = getRang();
+  near.forEach(l => {
+    const left = l.start - now;
+    [['lead', left <= leadMs], ['start', false]].forEach(([stage, due]) => {
+      const k = `${l.key}-${stage}`;
+      if (due && al.on && !rang.includes(k)) { markRang(k); fireAlarm(l, left); }
+    });
+  });
+  // لحظة البداية: يرن مرة ثانية لو لسا ما رنّ
+  todayLectures(now).forEach(l => {
+    const since = now - l.start, k = `${l.key}-start`;
+    if (since >= 0 && since < 120000) {
+      if (al.on && !getRang().includes(k)) { markRang(k); fireAlarm(l, 0); }
+      const ko = `${l.key}-open`;
+      if (al.autoOpen && getLink(l.name) && !getRang().includes(ko)) { markRang(ko); openLecture(l); }
+    }
+  });
+  slot.innerHTML = near.map(l => {
+    const left = l.start - now, soon = left <= leadMs, url = getLink(l.name);
+    return `<div class="sticky lec${soon ? ' soon' : ''}${now < ringingUntil ? ' ringing' : ''}" onclick="setDay(new Date(),true)">
+      <div><div class="sticky-date">محاضرة قربت</div><div class="sticky-name">${esc(l.name)}</div><div class="sticky-date">الساعة ${l.time}</div>${url ? `<a class="join" href="${esc(url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">انضم</a>` : ''}</div>
+      <div class="sticky-left">${fmtLeft(left)}</div></div>`;
+  }).join('');
+  if (near.length) {
+    const l = near[0], left = l.start - now;
+    document.title = `${fmtLeft(left).replace(/<[^>]+>/g, ' ').trim()} · ${l.name}`;
+  } else if (document.title !== 'مخطط 2026') document.title = 'مخطط 2026';
+}
+let ringTimer = null, ringStopTimer = null;
+const RING_MAX_MIN = 5;   // أقصى مدة رنين إذا ما أوقفته
+function showBanner(msg, url) {
+  document.getElementById('alarm-msg').textContent = msg;
+  const j = document.getElementById('alarm-join');
+  if (url) { j.href = url; j.hidden = false; } else { j.hidden = true; j.removeAttribute('href'); }
+  document.getElementById('alarm-banner').classList.add('show');
+}
+function startRinging(msg, url) {
+  stopRinging();
+  showBanner(msg, url);
+  ringingUntil = Infinity;
+  ringSound();
+  ringTimer = setInterval(ringSound, 3000);
+  ringStopTimer = setTimeout(stopRinging, RING_MAX_MIN * 60000);
+}
+function stopRinging() {
+  clearInterval(ringTimer); clearTimeout(ringStopTimer); ringTimer = ringStopTimer = null;
+  ringingUntil = 0;
+  document.getElementById('alarm-banner').classList.remove('show');
+}
+function fireAlarm(l, left) {
+  const mins = Math.max(1, Math.round(left / 60000));
+  const msg = left <= 0 ? `بدأت محاضرة ${l.name}` : `محاضرة ${l.name} بعد ${mins} دقيقة (${l.time})`;
+  startRinging(msg, getLink(l.name));
+  try { if ('Notification' in window && Notification.permission === 'granted') new Notification('مخطط 2026', {body: msg, requireInteraction: true}); } catch (e) {}
+}
+function openLecture(l) {
+  const url = getLink(l.name);
+  if (!url) return;
+  let w = null;
+  try { w = window.open(url, '_blank'); } catch (e) {}
+  if (w) { try { w.opener = null; } catch (e) {} return; }
+  // المتصفح منع الفتح التلقائي: زر "انضم" بالشريط (ضغطة منك بتفتحه)
+  showBanner(`بدأت محاضرة ${l.name}. المتصفح منع الفتح التلقائي، اضغط انضم`, url);
+}
+function renderAlarmCtl() {
+  const al = getAlarm(), b = document.getElementById('alarm-toggle');
+  b.textContent = al.on ? 'منبه المحاضرات: مفعّل' : 'منبه المحاضرات: متوقف';
+  b.classList.toggle('off', !al.on); b.setAttribute('aria-pressed', al.on);
+  document.getElementById('alarm-lead').value = String(al.lead);
+}
+function initAlarm() {
+  renderAlarmCtl();
+  renderLinksUI();
+  document.getElementById('alarm-toggle').addEventListener('click', () => {
+    const al = getAlarm(); al.on = !al.on; setAlarm(al); renderAlarmCtl();
+    if (al.on) {
+      unlockAudio();
+      try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); } catch (e) {}
+      toast('تم تفعيل المنبه. خلّي الصفحة مفتوحة بتبويب.', 3500);
+    }
+    alarmTick();
+  });
+  document.getElementById('alarm-lead').addEventListener('change', function () {
+    const al = getAlarm(); al.lead = +this.value; setAlarm(al); alarmTick();
+  });
+  document.getElementById('alarm-test').addEventListener('click', () => startRinging('هيك رح يرن المنبه لحد ما توقفه'));
+  document.getElementById('alarm-stop').addEventListener('click', stopRinging);
+  document.getElementById('alarm-join').addEventListener('click', stopRinging);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') stopRinging(); });
+  alarmTick();
+  setInterval(alarmTick, 1000);
+}
+
+// ================= تشغيل =================
+createMonthTabs();
+renderCalendar();
+renderDeadlines();
+(function () {
+  const now = new Date();
+  goToMonth(now.getFullYear() === 2026 ? now.getMonth() : 0);
+})();
+initDayPanel();
+initAlarm();
+
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey) {
+    if (e.key === 'ArrowRight') { e.preventDefault(); navigateMonth(-1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); navigateMonth(1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      e.preventDefault();
+      document.querySelector('details.search').open = true;
+      document.getElementById('search-input').focus();
+    }
+  }
+});
+document.getElementById('search-input').addEventListener('keypress', e => { if (e.key === 'Enter') performSearch(); });
+
+// ================= البحث =================
+function performSearch() {
+  const term = document.getElementById('search-input').value.trim().toLowerCase();
+  const box = document.getElementById('search-results');
+  if (!term) { box.classList.remove('active'); return; }
+  const results = [];
+  document.querySelectorAll('.month-page').forEach((page, mi) => {
+    const mname = months2026[mi].ar;
+    const push = (type, el) => results.push({month: mname, monthIndex: mi, type, text: el.innerText, element: el});
+    page.querySelectorAll('.task-text').forEach(t => {
+      if (!t.innerText.toLowerCase().includes(term)) return;
+      const td = t.closest('td');
+      let loc = 'مهمة شهرية';
+      if (td) {
+        const dn = td.querySelector('.day-number');
+        loc = dn ? `يوم ${dn.innerText}` : (td.classList.contains('week-cell') ? td.querySelector('.week-label').innerText : loc);
+      }
+      push(loc, t);
+    });
+    page.querySelectorAll('.free-note').forEach(n => {
+      if (n.innerText && n.innerText.toLowerCase().includes(term)) {
+        const dn = n.closest('td') && n.closest('td').querySelector('.day-number');
+        push(dn ? `ملاحظة، يوم ${dn.innerText}` : 'ملاحظة', n);
+      }
+    });
+    page.querySelectorAll('.event-badge').forEach(ev => {
+      if (ev.innerText && ev.innerText.toLowerCase().includes(term)) {
+        const dn = ev.closest('td').querySelector('.day-number');
+        push(`حدث، يوم ${dn ? dn.innerText : ''}`, ev);
+      }
+    });
+  });
+  window.searchResults = results;
+  if (!results.length) { box.innerHTML = '<div class="no-results">ما في نتائج</div>'; box.classList.add('active'); return; }
+  box.innerHTML = `<div style="margin-bottom:8px;color:var(--accent);font-weight:600">${results.length} نتيجة</div>` +
+    results.map((r, i) => `<div class="search-result-item" onclick="goToSearchResult(${i})">
+      <div class="search-result-month">${r.month} · ${r.type}</div>
+      <div class="search-result-text">${highlightText(r.text, term)}</div></div>`).join('');
+  box.classList.add('active');
+}
+function highlightText(text, term) {
+  return esc(text).replace(new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'), '<span class="search-highlight">$1</span>');
+}
+function goToSearchResult(i) {
+  const r = window.searchResults[i];
+  goToMonth(r.monthIndex);
+  setTimeout(() => {
+    r.element.scrollIntoView({behavior: 'smooth', block: 'center'});
+    const old = r.element.style.background;
+    r.element.style.background = '#5a4a1d';
+    setTimeout(() => r.element.style.background = old, 1800);
+  }, 250);
+}
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  document.getElementById('search-results').classList.remove('active');
+  window.searchResults = [];
+}
+</script>
+
+<script>
+/* ===== سجل الشغل: كود منفصل ما بيلمس الرزنامة ===== */
+(function(){
+  const KEY='remote_work_log_data';
+  let rows=[]; try{ rows=JSON.parse(localStorage.getItem(KEY)||'[]'); }catch(e){}
+  const $w=id=>document.getElementById(id);
+  const wEsc=t=>String(t==null?'':t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const AR=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+  const EN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dow=ds=>new Date(ds+'T00:00:00').getDay();
+  const num=n=>+Number(n).toFixed(2);
+  const save=()=>localStorage.setItem(KEY,JSON.stringify(rows));
+  const p2=n=>String(n).padStart(2,'0');
+  const todayISO=()=>{const n=new Date();return n.getFullYear()+'-'+p2(n.getMonth()+1)+'-'+p2(n.getDate());};
+  let savedY=0;
+
+  function render(){
+    const tb=$w('wl-body'); tb.innerHTML='';
+    const t=todayISO(), mon=t.slice(0,7);
+    let total=0, month=0, today=0;
+    rows.forEach(r=>{ const h=parseFloat(r.hours)||0; total+=h; if(r.date&&r.date.startsWith(mon)) month+=h; if(r.date===t) today+=h; });
+    $w('wl-chips').innerHTML=
+      `<span class="wl-chip">الإجمالي<b>${num(total)} س</b></span>`+
+      `<span class="wl-chip">هذا الشهر<b>${num(month)} س</b></span>`+
+      `<span class="wl-chip">اليوم<b>${num(today)} س</b></span>`+
+      `<span class="wl-chip">عدد السجلات<b>${rows.length}</b></span>`;
+    $w('wl-sub').textContent = rows.length ? `${num(total)} ساعة مسجلة` : '';
+    if(!rows.length){ tb.innerHTML='<tr><td colspan="6" class="wl-empty">لا يوجد سجلات بعد</td></tr>'; return; }
+    rows.map((r,i)=>({r,i})).sort((a,b)=>(a.r.date||'').localeCompare(b.r.date||'')||a.i-b.i).forEach(({r,i})=>{
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td class="wl-num">${wEsc(r.date)}</td><td class="wl-muted">${r.date?AR[dow(r.date)]:''}</td><td><strong style="font-weight:500">${wEsc(r.name)}</strong></td><td class="wl-num">${wEsc(r.hours)} س</td><td class="wl-muted">${wEsc(r.notes)||'—'}</td><td><button class="link wl-del" onclick="workDelete(${i})">حذف</button></td>`;
+      tb.appendChild(tr);
+    });
+    const tr=document.createElement('tr'); tr.className='wl-total';
+    tr.innerHTML=`<td colspan="3">مجموع الساعات</td><td colspan="3" class="wl-num">${num(total)} س</td>`;
+    tb.appendChild(tr);
+  }
+
+  window.openWork=function(){
+    savedY=window.scrollY;
+    document.body.classList.add('work-open');
+    window.scrollTo(0,0); render();
+    try{history.replaceState(null,'','#work');}catch(e){}
+  };
+  window.closeWork=function(){
+    document.body.classList.remove('work-open');
+    try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+    window.scrollTo(0,savedY);
+  };
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&document.body.classList.contains('work-open')&&!(e.target.closest&&e.target.closest('input,textarea'))) closeWork();
+  });
+
+  window.workAdd=function(e){
+    e.preventDefault();
+    rows.push({date:$w('wl-date').value,name:$w('wl-name').value.trim(),hours:$w('wl-hours').value,notes:$w('wl-notes').value.trim()});
+    save();
+    $w('wl-name').value=''; $w('wl-hours').value=''; $w('wl-notes').value='';
+    render(); if(window.toast) toast('تمت الإضافة');
+  };
+  window.workDelete=function(i){ rows.splice(i,1); save(); render(); };
+  window.workClear=function(){ if(confirm('حذف كل سجلات الشغل؟')){ rows=[]; localStorage.removeItem(KEY); render(); } };
+
+  window.workExport=function(){
+    if(!rows.length){ if(window.toast) toast('ما في بيانات للتصدير'); return; }
+    const sorted=rows.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+    const total=sorted.reduce((s,t)=>s+(parseFloat(t.hours)||0),0);
+    const body=sorted.map(t=>`<tr><td>${wEsc(t.date)}</td><td class="m">${t.date?EN[dow(t.date)]:''}</td><td><b>${wEsc(t.name)}</b></td><td>${wEsc(t.hours)} hrs</td><td class="m">${wEsc(t.notes)||'—'}</td></tr>`).join('');
+    const html=`<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="utf-8"><title>Work Log Report</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;background:#fff;color:#111;padding:36px;line-height:1.6}
+.head{border-bottom:2px solid #111;padding-bottom:14px;margin-bottom:22px}
+.title{font-size:24px;font-weight:600;color:#000}.meta{font-size:13px;color:#555;margin-top:4px}
+table{width:100%;border-collapse:collapse;text-align:right}
+th,td{padding:11px 12px;font-size:13px;border-bottom:1px solid #ccc;color:#111}
+th{color:#000;font-weight:600;font-size:12px;background:#eee;border-bottom:2px solid #999}
+td.m{color:#444}
+tr.total td{font-weight:700;background:#eee;border-bottom:none;font-size:14px;color:#000}
+@media print{body{padding:0}tr{page-break-inside:avoid}thead{display:table-header-group}}
+</style></head><body>
+<div class="head"><div class="title">Work Log Report</div><div class="meta">Generated on ${todayISO()}</div></div>
+<div class="box"><table><thead><tr><th>Date</th><th>Day</th><th>Task / Description</th><th>Hours</th><th>Notes</th></tr></thead><tbody>${body}
+<tr class="total"><td colspan="3">Total Accumulated Hours</td><td colspan="2">${num(total)} hrs</td></tr></tbody></table></div>
+</body></html>`;
+    const w=window.open('','_blank'); if(!w){ if(window.toast) toast('اسمح بالنوافذ المنبثقة للتصدير'); return; }
+    w.document.write(html); w.document.close(); w.focus();
+    setTimeout(()=>w.print(),600);
+  };
+
+  $w('wl-date').value=todayISO();
+  if(location.hash==='#work') openWork();
+})();
+</script>
+</body>
+</html>
