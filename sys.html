@@ -294,6 +294,28 @@ body.work-open>.wrap{display:none}
 body.work-open #work-view{display:block}
 #work-view .w-wrap{max-width:1100px;margin:0 auto}
 .top-left{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+
+/* ===== قائمة التاسكات (جانب سجل الشغل) ===== */
+#work-view .w-wrap{max-width:1500px}
+.w-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:22px;align-items:start}
+.w-main{min-width:0}
+.wl-tasks{position:sticky;top:16px;max-height:calc(100vh - 100px);overflow:auto;margin-bottom:0}
+.tk-form{display:flex;gap:8px;margin-bottom:12px}
+.tk-form .inp{flex:1;min-width:0}
+#tk-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+#tk-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:12px;background:var(--g2);border:1px solid var(--gb)}
+#tk-list input[type=checkbox]{margin-top:4px;cursor:pointer;flex:none}
+#tk-list .tk-t{flex:1;min-width:0;line-height:1.5;word-break:break-word;font-size:.95rem}
+#tk-list li.done .tk-t{text-decoration:line-through;color:var(--faint)}
+#tk-list .tk-x{background:none;border:0;color:var(--muted);cursor:pointer;font-size:1.1rem;line-height:1;padding:2px 4px}
+#tk-list .tk-x:hover{color:var(--warm)}
+.tk-empty{text-align:center;color:var(--faint);padding:16px 0;font-size:.9rem}
+.tk-foot{margin-top:12px;display:flex;justify-content:flex-start}
+#tk-count{color:var(--faint);font-size:.85rem;margin-right:8px;font-variant-numeric:tabular-nums}
+@media (max-width:1000px){
+  .w-layout{grid-template-columns:1fr}
+  .wl-tasks{position:static;max-height:380px;order:-1}
+}
 .wl-actions{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 22px}
 .wl-card{background:var(--g);border:1px solid var(--gb);box-shadow:var(--hl),var(--shadow);-webkit-backdrop-filter:var(--blur);backdrop-filter:var(--blur);border-radius:20px;padding:16px 20px;margin-bottom:20px}
 .wl-title{font-weight:500;color:var(--muted);font-size:.95rem;margin-bottom:12px}
@@ -408,7 +430,7 @@ body.work-open #work-view{display:block}
 
 
 <div id="work-view" aria-label="سجل الشغل">
-  <div class="w-wrap">
+  <div class="w-wrap"><div class="w-layout"><div class="w-main">
     <div class="top">
       <div class="top-left"><h2>سجل الشغل</h2><span id="wl-sub"></span></div>
     </div>
@@ -441,6 +463,17 @@ body.work-open #work-view{display:block}
         <tbody id="wl-body"></tbody>
       </table>
     </div>
+  </div>
+  <aside class="wl-card wl-tasks" aria-label="التاسكات">
+    <div class="wl-title">التاسكات<span id="tk-count"></span></div>
+    <form class="tk-form" id="tk-form" autocomplete="off">
+      <input type="text" id="tk-input" class="inp" placeholder="اكتب تاسك جديد…" maxlength="300">
+      <button type="submit" class="btn">+</button>
+    </form>
+    <ul id="tk-list"></ul>
+    <div class="tk-foot"><button type="button" class="btn btn-ghost" id="tk-clear">مسح المنجز</button></div>
+  </aside>
+  </div>
   </div>
 </div>
 
@@ -1304,6 +1337,44 @@ tr.total td{font-weight:700;background:#eee;border-bottom:none;font-size:14px;co
   $w('wl-date').value=todayISO();
   if(location.hash==='#work') openWork();
 })();
+</script>
+<script>
+/* ===== التاسكات: كود منفصل، بيتخزن بمفتاح لحاله ===== */
+(function(){
+  var KEY='work_tasks_data', tasks=[];
+  try{ tasks=JSON.parse(localStorage.getItem(KEY)||'[]'); if(!Array.isArray(tasks)) tasks=[]; }catch(e){ tasks=[]; }
+  var list=document.getElementById('tk-list'), cnt=document.getElementById('tk-count');
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(tasks)); }catch(e){} }
+  function render(){
+    list.innerHTML='';
+    var done=tasks.filter(function(t){return t.d}).length;
+    cnt.textContent=tasks.length?(done+'/'+tasks.length):'';
+    if(!tasks.length){ var e=document.createElement('li'); e.className='tk-empty'; e.style.cssText='background:none;border:0;display:block'; e.textContent='ما في تاسكات'; list.appendChild(e); return; }
+    tasks.forEach(function(t,i){
+      var li=document.createElement('li'); if(t.d) li.className='done';
+      var cb=document.createElement('input'); cb.type='checkbox'; cb.checked=!!t.d;
+      cb.addEventListener('change',function(){ t.d=cb.checked; save(); render(); });
+      var sp=document.createElement('span'); sp.className='tk-t'; sp.textContent=t.t;
+      var x=document.createElement('button'); x.type='button'; x.className='tk-x'; x.textContent='×'; x.title='حذف'; x.setAttribute('aria-label','حذف');
+      x.addEventListener('click',function(){ tasks.splice(i,1); save(); render(); });
+      li.appendChild(cb); li.appendChild(sp); li.appendChild(x); list.appendChild(li);
+    });
+  }
+  document.getElementById('tk-form').addEventListener('submit',function(e){
+    e.preventDefault();
+    var inp=document.getElementById('tk-input'), v=inp.value.trim();
+    if(!v) return;
+    tasks.push({t:v,d:false}); inp.value=''; save(); render(); inp.focus();
+  });
+  document.getElementById('tk-clear').addEventListener('click',function(){
+    if(!tasks.some(function(t){return t.d})) return;
+    tasks=tasks.filter(function(t){return !t.d}); save(); render();
+  });
+  render();
+})();
+</script>
+<script>
+document.addEventListener("sys-unlocked",function(){ if(window.openWork) openWork(); });
 </script>
 </body>
 </html>
