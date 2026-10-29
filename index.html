@@ -1938,9 +1938,6 @@
             linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
     }
 }
-@media (prefers-reduced-motion: reduce) {
-    .hero-video video { display: none; }
-}
 
 /* ----- video loading indicator (visible only while the video is still loading) ----- */
 .hero-vload {
@@ -2001,11 +1998,12 @@ html { transition: --a1 .9s ease, --a2 .9s ease, --a3 .9s ease; }
 /* soft colour glows behind everything: this is what the glass panels blur */
 body {
     background-image:
-        radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.30) 100%),
+        radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.38) 100%),
+        linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0) 28%, rgba(0,0,0,0.22) 100%),
         linear-gradient(rgba(0,0,0,var(--scrim)), rgba(0,0,0,var(--scrim))),
-        radial-gradient(60vw 55vh at 12% 18%, var(--a1), transparent 70%),
-        radial-gradient(55vw 55vh at 88% 78%, var(--a2), transparent 70%),
-        radial-gradient(38vw 40vh at 72% 14%, var(--a3), transparent 70%);
+        radial-gradient(70vw 60vh at 10% 15%, var(--a1), transparent 72%),
+        radial-gradient(65vw 60vh at 92% 82%, var(--a2), transparent 72%),
+        radial-gradient(42vw 42vh at 74% 12%, var(--a3), transparent 70%);
     background-attachment: fixed;
 }
 :root {
@@ -2116,9 +2114,114 @@ body {
 .ch-line .ch-row{margin-bottom:0}
 .ch-g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 @media(max-width:560px){.ch-g3{grid-template-columns:1fr 1fr}}
+/* ===== COOKING PRELOADER (clean / minimal) ===== */
+.cook-loader {
+    position: fixed; inset: 0; z-index: 20000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 36px; padding: 24px; background: #050505;
+    transition: opacity .8s ease, visibility 0s linear .8s;
+}
+.cook-loader::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 55% 40% at 50% 45%, rgba(255,170,90,.10), transparent 72%);
+}
+.cook-loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* viewfinder corners + REC dot */
+.cook-corner { position: absolute; width: 26px; height: 26px; border: 0 solid rgba(255,255,255,.5); }
+.cook-corner.tl { top: 22px; left: 22px;  border-top-width: 1.5px; border-left-width: 1.5px; }
+.cook-corner.tr { top: 22px; right: 22px; border-top-width: 1.5px; border-right-width: 1.5px; }
+.cook-corner.bl { bottom: 22px; left: 22px;  border-bottom-width: 1.5px; border-left-width: 1.5px; }
+.cook-corner.br { bottom: 22px; right: 22px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+.cook-recdot { position: absolute; top: 30px; left: 60px; width: 7px; height: 7px; border-radius: 50%; background: #e84040; animation: tcBlink 1.1s ease-in-out infinite; }
+
+.cook-svg { width: min(270px, 66vw); height: auto; overflow: visible; position: relative; }
+.cook-svg .ln { fill: none; stroke: #f2efe9; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.cook-svg .ln-soft { fill: none; stroke: rgba(255,255,255,.22); stroke-width: 1; }
+.cook-svg .ln-blade { fill: none; stroke: rgba(255,255,255,.7); stroke-width: 1.2; stroke-linecap: round; }
+
+.cook-heat circle { fill: none; stroke: rgba(255,185,110,.55); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: cookHeat 3s ease-out infinite; opacity: 0; }
+.cook-heat circle:nth-child(2) { animation-delay: 1s; }
+.cook-heat circle:nth-child(3) { animation-delay: 2s; }
+@keyframes cookHeat { 0% { transform: scale(1); opacity: .55; } 100% { transform: scale(1.4); opacity: 0; } }
+
+.cook-iris { transform-box: view-box; transform-origin: 100px 80px; animation: cookSpin 10s linear infinite; }
+.cook-hex  { transform-box: view-box; transform-origin: 100px 80px; animation: cookBreath 2.6s ease-in-out infinite; }
+.cook-orbit { transform-box: view-box; transform-origin: 100px 80px; animation: cookSpin 6s linear infinite; }
+@keyframes cookSpin { to { transform: rotate(360deg); } }
+@keyframes cookBreath { 0%, 100% { transform: scale(1); } 50% { transform: scale(.72); } }
+.cook-core { fill: #ffb978; animation: cookCore 2.6s ease-in-out infinite; }
+@keyframes cookCore { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+.cook-title {
+    position: relative; font-family: 'Cairo', sans-serif; font-weight: 700;
+    font-size: clamp(1.25rem, 5.2vw, 1.75rem); letter-spacing: 1px; line-height: 1.4;
+    background: linear-gradient(100deg, #77746e 30%, #ffffff 50%, #77746e 70%);
+    background-size: 260% 100%; -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+    animation: cookShimmer 2.4s linear infinite;
+}
+@keyframes cookShimmer { from { background-position: 130% 0; } to { background-position: -130% 0; } }
+.cook-bar { position: relative; width: 120px; height: 1px; background: rgba(255,255,255,.14); overflow: hidden; direction: ltr; margin-top: -14px; }
+.cook-bar u { position: absolute; top: 0; bottom: 0; width: 40%; background: linear-gradient(90deg, transparent, #ffd9a8, transparent); text-decoration: none; animation: cookBar 1.5s ease-in-out infinite; }
+@keyframes cookBar { 0% { left: -45%; } 100% { left: 105%; } }
 </style>
 </head>
 <body>
+<!-- Cooking preloader: visible from the very first paint, removed once the page is ready -->
+<div class="cook-loader" id="cookLoader" role="status" aria-live="polite">
+  <span class="cook-corner tl"></span><span class="cook-corner tr"></span>
+  <span class="cook-corner bl"></span><span class="cook-corner br"></span>
+  <span class="cook-recdot"></span>
+
+  <svg class="cook-svg" viewBox="0 0 240 160" aria-hidden="true">
+    <!-- heat rings -->
+    <g class="cook-heat">
+      <circle cx="100" cy="80" r="58"/><circle cx="100" cy="80" r="58"/><circle cx="100" cy="80" r="58"/>
+    </g>
+    <!-- pan, seen from above -->
+    <circle class="ln" cx="100" cy="80" r="58"/>
+    <circle class="ln-soft" cx="100" cy="80" r="50"/>
+    <rect class="ln" x="158" y="74" width="74" height="12" rx="6"/>
+    <line class="ln-soft" x1="170" y1="80" x2="222" y2="80"/>
+    <!-- lens sitting in the pan like an egg -->
+    <circle class="ln" cx="100" cy="80" r="26"/>
+    <circle class="ln-soft" cx="100" cy="80" r="21"/>
+    <g class="cook-iris">
+      <g class="cook-hex">
+        <polygon class="ln-blade" points="114,80 107,92.1 93,92.1 86,80 93,67.9 107,67.9"/>
+        <line class="ln-blade" x1="114" y1="80"   x2="126" y2="80"/>
+        <line class="ln-blade" x1="107" y1="92.1" x2="113" y2="102.5"/>
+        <line class="ln-blade" x1="93"  y1="92.1" x2="87"  y2="102.5"/>
+        <line class="ln-blade" x1="86"  y1="80"   x2="74"  y2="80"/>
+        <line class="ln-blade" x1="93"  y1="67.9" x2="87"  y2="57.5"/>
+        <line class="ln-blade" x1="107" y1="67.9" x2="113" y2="57.5"/>
+      </g>
+    </g>
+    <circle class="cook-core" cx="100" cy="80" r="3"/>
+    <!-- sizzle: tiny dots orbiting inside the pan -->
+    <g class="cook-orbit" fill="#ffbf7a">
+      <circle cx="100" cy="40" r="1.8"/><circle cx="135" cy="100" r="1.4"/><circle cx="65" cy="100" r="1.6"/>
+    </g>
+  </svg>
+
+  <div class="cook-title">جاري طبخ الفن</div>
+  <div class="cook-bar"><u></u></div>
+</div>
+<script>
+(function () {
+  var L = document.getElementById('cookLoader');
+  if (!L) return;
+  var t0 = Date.now(), closed = false;
+  function close() {
+    if (closed) return; closed = true;
+    var wait = Math.max(0, 1800 - (Date.now() - t0));   // always shown ~1.8s so it reads as intentional
+    setTimeout(function () { L.classList.add('done'); setTimeout(function () { L.remove(); }, 900); }, wait);
+  }
+  if (document.readyState === 'complete') close(); else window.addEventListener('load', close, { once: true });
+  setTimeout(close, 7000);   // never trap the visitor on slow connections
+})();
+</script>
 <!-- Mobile viewing notice -->
 <div class="device-toast" id="deviceToast">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
@@ -2154,7 +2257,7 @@ body {
 </div>
 <div class="hero-content wrap" style="max-width:none; padding-right: max(40px, calc((100vw - 1120px)/2 + 24px)); padding-left: 24px;">
 <span class="hero-label" data-i18n="hero-label">سجل الأعمال — ٢٠٢٦</span>
-<h1 class="hero-name">بكر<br/>المتولي</h1>
+<h1 class="hero-name" data-i18n="hero-name">بكر<br/>المتولي</h1>
 <p class="hero-bio" data-i18n="hero-bio">صناعة الأفلام والإدارة الإبداعية مش مجرد كاميرا ولقطات حلوة، هي قدرة على حل التحديات البصرية ودمج الهويات. كمهندس برمجيات ومخرج، بجمع بين الهيكلة الدقيقة والبعد النفسي للكادر. شغلي بيركز على النزول للميدان والاحتكاك بالواقع لتقديم أعمال بصرية بتوصل الرسالة بوضوح، بعيدا عن التزييف أو الاستعراض.</p>
 <div class="hero-cta">
 <a class="btn btn-primary" data-i18n="btn-view" href="#projects">
@@ -2214,7 +2317,7 @@ body {
 
 <!-- Projects -->
 <div class="wrap" id="projects">
-<section class="project-section" data-color="#5c2008">
+<section class="project-section" data-color="#7a2c12">
 <div class="project-header">
 <span class="project-number">٠١</span>
 <div class="award-badge" data-i18n="p01-badge">🏆 الأول في الأردن | الثاني عربيا</div>
@@ -2245,7 +2348,7 @@ body {
 <div class="bts-item"><img alt="كواليس غدا الإعدام" src="Images/exec-bts2.jpg"/></div>
 </div></section>
 
-<section class="project-section" data-color="#2a1f12">
+<section class="project-section" data-color="#6a4a1e">
 <div class="project-header">
 <span class="project-number">٠٢</span>
 <span class="project-tag" data-i18n="p02-tag">إخراج مرئي | إنتاج</span>
@@ -2275,7 +2378,7 @@ body {
 <div class="bts-item"><img alt="كواليس حسنة" src="Images/hasana-bts2.jpg"/></div>
 </div></section>
 
-<section class="project-section" data-color="#081628">
+<section class="project-section" data-color="#123c54">
 <div class="project-header">
 <span class="project-number">٠٣</span>
 <span class="project-tag" data-i18n="p03-tag">إعادة بناء هوية | إنتاج محتوى</span>
@@ -2303,7 +2406,7 @@ body {
 <div class="bts-item"><img alt="كواليس Specto" src="Images/specto-bts2.jpg"/></div>
 </div></section>
 
-<section class="project-section" data-color="#280808">
+<section class="project-section" data-color="#5e1522">
 <div class="project-header">
 <span class="project-number">٠٤</span>
 <span class="project-tag" data-i18n="p04-tag">حملة محتوى | تسويق خفي</span>
@@ -2354,7 +2457,7 @@ body {
 <div class="bts-item"><img alt="كواليس DD" src="Images/dd-bts2.jpg"/></div>
 </div></section>
 
-<section class="project-section" data-color="#07180a">
+<section class="project-section" data-color="#1f4a2c">
 <div class="project-header">
 <span class="project-number">٠٦</span>
 <span class="project-tag" data-i18n="p06-tag">سلسلة محتوى | توثيق وتغطية</span>
@@ -2378,7 +2481,7 @@ body {
 <div class="bts-item"><img alt="كواليس روبو فايت" src="Images/bus-bts2.jpg"/></div>
 </div></section>
 
-<section class="project-section" data-color="#081028">
+<section class="project-section" data-color="#1c2c60">
 <div class="project-header">
 <span class="project-number">٠٧</span>
 <span class="project-tag" data-i18n="p07-tag">إدارة فريق | تدريب وتطوير</span>
@@ -2404,7 +2507,7 @@ body {
 <div class="bts-item"><img alt="كواليس iTeam" src="Images/iteam-bts2.jpg"/></div>
 </div></section>
 
-<section class="project-section" data-color="#130820">
+<section class="project-section" data-color="#42205e">
 <div class="project-header">
 <span class="project-number">٠٨</span>
 <span class="project-tag" data-i18n="p08-tag">حملة انطلاق | محتوى موجه</span>
@@ -2430,7 +2533,7 @@ body {
 <div class="bts-item"><img alt="كواليس Mentora" src="Images/mentora-bts2.jpg"/></div>
 </div></section>
 
-<section class="project-section" data-color="#4a1e04">
+<section class="project-section" data-color="#8a4612">
 <div class="project-header">
 <span class="project-number">٠٩</span>
 <span class="project-tag" data-i18n="p09-tag">هوية بصرية | محتوى إعلاني</span>
@@ -2674,7 +2777,7 @@ body {
 <img alt="" class="end-bg" src="Images/footer-bg.jpg"/>
 <div class="end-overlay"></div>
 <div class="end-content">
-<section class="end-about">
+<section class="end-about" id="about" style="scroll-margin-top:120px">
 <span class="end-about-label" data-i18n="end-label">عني</span>
 <p class="about-text" data-i18n="end-about" style="max-width: 680px;">لطالما آمنت بمقولة: بالأمس كنت ذكيا فأردت أن أغير العالم, اليوم أنا حكيم ولذلك سأغير نفسي.<br/><br/>في رحلتي بين هندسة البرمجيات وصناعة المحتوى, لا ارى نفسي خبيرا في كل شي, بل ارى نفسي طالبا دائم الفضول. التخصص في مجال واحد امان, لكن التوسع في مجالات مختلفة هو ما يمنحنا زوايا رؤية جديدة ومن هنا ينتج الابداع...</p>
 <p class="end-clients-line" data-i18n="logo-strip-more">والعديد من العملاء الآخرين</p>
@@ -2764,9 +2867,11 @@ function ytThumbCheck(img) {
     const root = document.documentElement.style;
     if (color === '#000000') { ['--a1', '--a2', '--a3'].forEach(k => root.setProperty(k, 'rgba(0,0,0,0)')); return; }
     const h = hex2h(color);
-    root.setProperty('--a1', hsl2hex(h - 8, 0.55, 0.30));
-    root.setProperty('--a2', hsl2hex(h + 22, 0.50, 0.22));
-    root.setProperty('--a3', hsl2hex(h + 4, 0.60, 0.36));
+    // cinematic "light leak" glows: a warm highlight, a cooler shadow tone and a soft accent,
+    // all drifting from the section's own hue so every project still has its own mood
+    root.setProperty('--a1', hsl2hex(h + 10, 0.62, 0.42));
+    root.setProperty('--a2', hsl2hex(h - 28, 0.55, 0.26));
+    root.setProperty('--a3', hsl2hex(h + 34, 0.70, 0.50));
   }
 
   function colorFor(sectionEl) {
@@ -2916,7 +3021,15 @@ function ytThumbCheck(img) {
     });
   })();
 
-  window.addEventListener('load', () => { document.querySelector('.hero')?.classList.add('hero-loaded'); });
+  // Reveal the hero text on DOM ready (with a safety timeout) instead of waiting for the
+  // window "load" event, which can take very long on phones and left the screen black.
+  (function () {
+    const reveal = () => document.querySelector('.hero')?.classList.add('hero-loaded');
+    window.addEventListener('load', reveal);
+    if (document.readyState !== 'loading') setTimeout(reveal, 300);
+    else document.addEventListener('DOMContentLoaded', () => setTimeout(reveal, 300));
+    setTimeout(reveal, 3000);
+  })();
 
   // Keep the mobile hero photo clear of the fixed topbar, whatever height it wraps to
   function syncTopbarOffset() {
@@ -3002,6 +3115,7 @@ function ytThumbCheck(img) {
 <script>
 const T = {
     "nav-name": {"ar": "بكر المتولي", "en": "Baker Almitwly"},
+    "hero-name": {"ar": "بكر<br/>المتولي", "en": "Baker<br/>Almitwly"},
     "desktop-note": {"ar": "يُفضل تصفح الموقع على الكمبيوتر لتجربة بصرية أفضل", "en": "Best viewed on a desktop for the full visual experience"},
     "btn-cv": {"ar": "تحميل السيرة الذاتية", "en": "Download CV"},
     "logo-strip-more": {"ar": "والعديد من العملاء الآخرين", "en": "and many other clients"},
@@ -3097,7 +3211,7 @@ const T = {
     "p09-mv2": {"ar": "محتوى إعلاني وترند", "en": "Ad Content & Trending Formats"},
     "end-label": {"ar": "عني", "en": "About"},
     "end-about": {"ar": "لطالما آمنت بمقولة: بالأمس كنت ذكيا فأردت أن أغير العالم, اليوم أنا حكيم ولذلك سأغير نفسي.<br/><br/>في رحلتي بين هندسة البرمجيات وصناعة المحتوى, لا ارى نفسي خبيرا في كل شي, بل ارى نفسي طالبا دائم الفضول. التخصص في مجال واحد امان, لكن التوسع في مجالات مختلفة هو ما يمنحنا زوايا رؤية جديدة ومن هنا ينتج الابداع...", "en": "I've always believed: yesterday I was smart and wanted to change the world. Today I'm wiser, so I'll change myself.<br/><br/>In my journey between software engineering and content production, I don't see myself as an expert in everything — I'm a permanently curious student. Specializing in one field is safe, but expanding into different fields gives you new angles of vision, and that's where creativity comes from."},
-    "footer-copy": {"ar": "© 2026 بكر المتولي — جميع الحقوق محفوظة.", "en": "© 2026 Bakr Al-Mitwali. All rights reserved."},
+    "footer-copy": {"ar": "© 2026 بكر المتولي — جميع الحقوق محفوظة.", "en": "© 2026 Baker Almitwly. All rights reserved."},
     "footer-whatsapp": {"ar": "واتساب", "en": "WhatsApp"},
 
     "process-heading": {"ar": "آلية العمل", "en": "The Workflow"},
@@ -3132,7 +3246,7 @@ function toggleLang() {
     if (!T[key]) return;
     const text = T[key][currentLang];
     if (text === undefined) return;
-    if (el.tagName === 'P' || el.classList.contains('about-text')) {
+    if (el.tagName === 'P' || el.classList.contains('about-text') || el.classList.contains('hero-name')) {
       el.innerHTML = text;
     } else {
       el.textContent = text;
@@ -3407,13 +3521,11 @@ function toggleLang() {
   const v = wrap && wrap.querySelector('video');
   if (!v || !hero) return;
 
-  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  const type = (conn && conn.effectiveType) || '';
-  const saver = !!(conn && conn.saveData);
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (saver || reduce || /(^|-)2g$/.test(type)) { const l = document.getElementById('heroVload'); if (l) l.remove(); return; }   // poster only, no loader
-
+  // NOTE: we no longer bail out on Data Saver / 2G / reduced-motion. Phones (Xiaomi/Edge, battery
+  // saver, "remove animations") often report those flags, which silently killed the hero video
+  // on mobile. It is a muted background clip, so it is safe to always try to play it.
   v.muted = true; v.defaultMuted = true; v.playsInline = true;
+  v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
 
   // loading indicator: shown from page open until the video is really playing
   const vl = document.getElementById('heroVload'), vFill = document.getElementById('heroVloadFill'), vPct = document.getElementById('heroVloadPct');
@@ -3431,7 +3543,16 @@ function toggleLang() {
   v.addEventListener('stalled', loadOn);
   v.addEventListener('waiting', loadOn);   // re-appears if playback stalls later
 
-  let started = false, inView = true;
+  let started = false, inView = true, triedFallback = false;
+  function tryPlay() {
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {
+      // autoplay blocked (power-saving mode): retry on the first touch / scroll
+      const again = () => { v.play().catch(() => {}); };
+      ['touchstart', 'click', 'scroll'].forEach(ev => window.addEventListener(ev, again, { once: true, passive: true }));
+      loadOff();
+    });
+  }
   function start() {
     if (started) return;
     const mobile = window.matchMedia('(max-width: 900px)').matches;
@@ -3439,16 +3560,21 @@ function toggleLang() {
     if (!src) return;
     started = true;
     v.addEventListener('playing', () => { wrap.classList.add('is-playing'); loadOff(); });
+    // if the mobile file is missing/unsupported, fall back to the main file
+    v.addEventListener('error', () => {
+      if (triedFallback || !v.dataset.src || v.src.indexOf(v.dataset.src) !== -1) { loadOff(); return; }
+      triedFallback = true;
+      v.src = v.dataset.src; v.load(); tryPlay();
+    });
     v.src = src;
     v.load();
-    const p = v.play();
-    if (p && p.catch) p.catch(loadOff);   // blocked (e.g. iOS Low Power Mode) -> poster stays, no spinner
+    tryPlay();
   }
 
-  const idle = window.requestIdleCallback || (cb => setTimeout(cb, 400));
-  const kick = () => idle(start, { timeout: 2500 });
-  if (document.readyState === 'complete') kick();
-  else window.addEventListener('load', kick, { once: true });
+  // start right away on DOM ready (don't wait for every image/iframe on the page)
+  const kick = () => setTimeout(start, 50);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', kick, { once: true });
+  else kick();
 
   new IntersectionObserver(([e]) => {
     inView = e.isIntersecting;
