@@ -14,6 +14,8 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>بكر المتولي — مخرج وصانع أفلام</title>
+<!-- Hero poster: tiny image painted instantly while the video loads in the background -->
+<link rel="preload" as="image" href="Images/hero-poster.jpg" fetchpriority="high"/>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&amp;display=swap" rel="stylesheet"/>
@@ -1875,6 +1877,174 @@
         }
 
 </style>
+<style id="heroVideoStyle">
+/* ===== HERO VIDEO BACKGROUND ===== */
+.hero-video {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    background: #000 url("Images/hero-poster.jpg") center / cover no-repeat; /* instant first paint */
+}
+.hero-video video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          /* 16:9 file fills any screen shape without stretching */
+    object-position: center center;
+    opacity: 0;
+    transition: opacity 1.4s ease;   /* soft cross-fade from poster to live video */
+    pointer-events: none;
+}
+.hero-video.is-playing video { opacity: 1; }
+.hero-video-shade {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(to top, #000 0%, rgba(0,0,0,0) 28%),
+        linear-gradient(to left, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.18) 70%),
+        linear-gradient(rgba(0,0,0,0.30), rgba(0,0,0,0.30));
+}
+.hero-content, .hero-image { position: relative; z-index: 2; }
+
+/* portrait removed: the video is the hero background */
+.hero-image { display: none !important; }
+.hero { grid-template-columns: 1fr 1fr; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; min-height: 100svh; } .hero-content { padding-top: calc(var(--topbar-h, 90px) + 24px); } }
+/* slightly brighter copy so it reads over moving footage */
+.hero-bio { color: rgba(255,255,255,0.78); text-shadow: 0 1px 12px rgba(0,0,0,0.6); }
+.hero .btn-secondary { color: rgba(255,255,255,0.9); border-color: rgba(255,255,255,0.35); background: rgba(0,0,0,0.25); }
+
+/* the portrait now melts into the video instead of a hard black edge */
+.hero-image::before, .hero-image::after { display: none; }
+.hero-image {
+    -webkit-mask-image: linear-gradient(to left, transparent 0%, #000 38%);
+    mask-image: linear-gradient(to left, transparent 0%, #000 38%);
+}
+[dir="ltr"] .hero-image {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 38%);
+}
+@media (max-width: 900px) {
+    .hero-image,
+    [dir="ltr"] .hero-image {
+        -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+    }
+    .hero-video-shade {
+        background:
+            linear-gradient(to top, #000 0%, rgba(0,0,0,0) 22%),
+            linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hero-video video { display: none; }
+}
+
+/* ----- video loading indicator (visible only while the video is still loading) ----- */
+.hero-vload {
+    position: absolute; left: 22px; bottom: 22px; z-index: 6;
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px 8px 12px; border-radius: 999px;
+    background: rgba(0,0,0,0.45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    color: rgba(255,255,255,0.85); font-size: 0.72rem; letter-spacing: 0.02em;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .5s ease, visibility 0s linear .5s;
+}
+.hero-vload.on { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+.hero-vload-spin {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.28); border-top-color: #fff;
+    animation: heroVspin .8s linear infinite;
+}
+.hero-vload-txt b { font-weight: 500; margin-inline-start: 6px; opacity: .75; direction: ltr; unicode-bidi: isolate; }
+.hero-vload-bar {
+    position: absolute; left: 14px; right: 14px; bottom: 0; height: 2px; overflow: hidden;
+    border-radius: 2px; background: rgba(255,255,255,0.14);
+}
+.hero-vload-bar u {
+    display: block; height: 100%; width: 35%; background: #fff; border-radius: 2px; text-decoration: none;
+    animation: heroVslide 1.2s ease-in-out infinite;   /* indeterminate until real progress is known */
+}
+.hero-vload.known .hero-vload-bar u { width: var(--p, 0%); animation: none; transition: width .3s ease; }
+@keyframes heroVspin { to { transform: rotate(360deg); } }
+@keyframes heroVslide { 0% { transform: translateX(-100%); } 100% { transform: translateX(290%); } }
+@media (max-width: 900px) { .hero-vload { left: 14px; bottom: 14px; font-size: 0.66rem; padding: 6px 12px 6px 10px; } }
+
+/* ===== CREAM SCROLL BACKGROUNDS + SOFT SHADOW LAYER ===== */
+:root { --scrim: 0; }  /* shadow layer between the light background color and the content: raise = darker */
+body {
+    background-image:
+        radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.34) 100%),
+        linear-gradient(rgba(0,0,0,var(--scrim)), rgba(0,0,0,var(--scrim)));
+    background-attachment: fixed, fixed;
+}
+/* brighter text inside the colored project sections so it stays readable on cream */
+.project-section {
+    --text-secondary: rgba(255,255,255,0.86);
+    --text-dim: rgba(255,255,255,0.62);
+    --accent: #ffffff;
+    --border-light: rgba(255,255,255,0.28);
+}
+.project-title, .project-number, .project-tag { text-shadow: 0 2px 14px rgba(0,0,0,0.35); }
+.client-logo { filter: brightness(0) invert(0.85) drop-shadow(0 2px 8px rgba(0,0,0,0.45)); }
+.client-logo:hover { filter: brightness(0) invert(1) drop-shadow(0 3px 10px rgba(0,0,0,0.55)); }
+.bts-item { box-shadow: 0 6px 18px rgba(0,0,0,0.5), 0 22px 48px rgba(0,0,0,0.4); }
+
+/* ===== GLASS DESIGN ===== */
+@property --a1 { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,0); }
+@property --a2 { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,0); }
+@property --a3 { syntax: '<color>'; inherits: true; initial-value: rgba(0,0,0,0); }
+html { transition: --a1 .9s ease, --a2 .9s ease, --a3 .9s ease; }
+/* soft colour glows behind everything: this is what the glass panels blur */
+body {
+    background-image:
+        radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.30) 100%),
+        linear-gradient(rgba(0,0,0,var(--scrim)), rgba(0,0,0,var(--scrim))),
+        radial-gradient(60vw 55vh at 12% 18%, var(--a1), transparent 70%),
+        radial-gradient(55vw 55vh at 88% 78%, var(--a2), transparent 70%),
+        radial-gradient(38vw 40vh at 72% 14%, var(--a3), transparent 70%);
+    background-attachment: fixed;
+}
+:root {
+    --glass-bg: linear-gradient(145deg, rgba(255,255,255,0.11), rgba(255,255,255,0.03));
+    --glass-line: rgba(255,255,255,0.26);
+    --glass-blur: blur(18px) saturate(165%);
+    --glass-shadow: 0 10px 34px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.22), inset 0 -1px 0 rgba(255,255,255,0.05);
+}
+.project-section:not([data-color="#000000"]) .project-story,
+.project-section:not([data-color="#000000"]) .main-video-wrapper,
+.award-badge, .project-tag,
+.hero .btn-secondary, .cv-trigger, .social-link {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-line);
+    box-shadow: var(--glass-shadow);
+}
+.project-section:not([data-color="#000000"]) .project-story { border-radius: 22px; padding: 26px 28px; }
+.project-section:not([data-color="#000000"]) .main-video-wrapper { border-radius: 20px; padding: 6px; overflow: hidden; }
+.project-section:not([data-color="#000000"]) .main-video-wrapper iframe { border-radius: 15px; }
+.bts-item { border: 1px solid var(--glass-line); border-radius: 18px; overflow: hidden; }
+.award-badge, .project-tag { display: inline-block; padding: 6px 14px; border-radius: 999px; }
+.cv-trigger { border-radius: 16px; }
+.social-link { border-radius: 50%; }
+.hero .btn-secondary { border-radius: 4px; }
+.topbar, .topbar.scrolled {
+    background: linear-gradient(180deg, rgba(20,16,16,0.52), rgba(20,16,16,0.34));
+    -webkit-backdrop-filter: blur(20px) saturate(170%); backdrop-filter: blur(20px) saturate(170%);
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28), inset 0 -1px 0 rgba(255,255,255,0.06);
+}
+@media (max-width: 900px) {
+    .project-section:not([data-color="#000000"]) .project-story { padding: 20px 18px; border-radius: 18px; }
+    :root { --glass-blur: blur(12px) saturate(150%); }   /* lighter blur = smoother on phones */
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    :root { --glass-bg: rgba(30,24,22,0.62); }
+}
+</style>
 <style id="chStyle">
 /* ===== HIDDEN CHARTER (secret) ===== */
 .topbar-name{cursor:inherit;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
@@ -1969,6 +2139,19 @@
 
 <!-- Hero -->
 <section class="hero">
+<!-- Hero background video (16:9). src is attached by JS only after the page has loaded. -->
+<div class="hero-video" id="heroVideo" aria-hidden="true">
+  <video muted loop playsinline preload="none" disablepictureinpicture disableremoteplayback
+         poster="Images/hero-poster.jpg"
+         data-src="Images/hero.mp4"
+         data-src-mobile="Images/hero-mobile.mp4"></video>
+  <div class="hero-video-shade"></div>
+</div>
+<div class="hero-vload" id="heroVload" aria-hidden="true">
+  <span class="hero-vload-spin"></span>
+  <span class="hero-vload-txt">جارٍ تحميل الفيديو<b id="heroVloadPct"></b></span>
+  <i class="hero-vload-bar"><u id="heroVloadFill"></u></i>
+</div>
 <div class="hero-content wrap" style="max-width:none; padding-right: max(40px, calc((100vw - 1120px)/2 + 24px)); padding-left: 24px;">
 <span class="hero-label" data-i18n="hero-label">سجل الأعمال — ٢٠٢٦</span>
 <h1 class="hero-name">بكر<br/>المتولي</h1>
@@ -2544,6 +2727,7 @@ function ytThumbCheck(img) {
     currentColor = color;
     document.documentElement.style.backgroundColor = color;
     document.body.style.backgroundColor = color;
+    setAmbient(color);
     const style = document.getElementById('dynamic-color-style') || (() => {
       const s = document.createElement('style');
       s.id = 'dynamic-color-style';
@@ -2553,9 +2737,43 @@ function ytThumbCheck(img) {
     style.textContent = `::-webkit-scrollbar-track { background: ${color}; }`;
   }
 
+  // One connected family of light colors: the hue drifts gently from warm sand through
+  // rose and mauve to soft blue, so neighbouring projects always relate to each other.
+  const HUES = [32, 22, 10, 354, 338, 318, 296, 272, 248];
+  const PS = 0.42, PL = 0.77;
+  function hsl2hex(h, s, l) {
+    h = ((h % 360) + 360) % 360;
+    const c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2;
+    const [r, g, b] = h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+    return '#' + [r, g, b].map(v => Math.round((v + m) * 255).toString(16).padStart(2, '0')).join('');
+  }
+  function hex2h(hex) {
+    const n = parseInt(hex.slice(1), 16), r = (n >> 16 & 255) / 255, g = (n >> 8 & 255) / 255, b = (n & 255) / 255;
+    const mx = Math.max(r, g, b), d = mx - Math.min(r, g, b);
+    if (!d) return 0;
+    let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+    return ((h * 60) + 360) % 360;
+  }
+  const projectSecs = Array.from(document.querySelectorAll('.project-section[data-color]')).filter(el => el.getAttribute('data-color') !== '#000000' && !el.classList.contains('side-stairs-section'));
+  function paletteFor(el) {
+    const i = projectSecs.indexOf(el);
+    return hsl2hex(HUES[(i < 0 ? 0 : i) % HUES.length], PS, PL);
+  }
+  // soft glows (three related tones of the current page color) that the glass panels blur
+  function setAmbient(color) {
+    const root = document.documentElement.style;
+    if (color === '#000000') { ['--a1', '--a2', '--a3'].forEach(k => root.setProperty(k, 'rgba(0,0,0,0)')); return; }
+    const h = hex2h(color);
+    root.setProperty('--a1', hsl2hex(h - 8, 0.55, 0.30));
+    root.setProperty('--a2', hsl2hex(h + 22, 0.50, 0.22));
+    root.setProperty('--a3', hsl2hex(h + 4, 0.60, 0.36));
+  }
+
   function colorFor(sectionEl) {
     const isStairs = sectionEl.classList.contains('side-stairs-section');
-    return isStairs ? '#000000' : (sectionEl.getAttribute('data-color') || BG_BLACK);
+    const raw = isStairs ? '#000000' : (sectionEl.getAttribute('data-color') || BG_BLACK);
+    // black sections (hero, lens, videos, process, footer) stay black; project colors go cream
+    return raw;   // original section colors
   }
 
   // Anchor each section's color trigger to its title (e.g. "غدا الإعدام") rather than
@@ -2775,7 +2993,7 @@ function ytThumbCheck(img) {
   });
 
   document.querySelectorAll('.client-logo').forEach(logo => {
-    logo.addEventListener('mouseenter', () => { logo.style.transform = 'scale(1.1) translateY(-4px)'; logo.style.filter = 'brightness(0) invert(1)'; });
+    logo.addEventListener('mouseenter', () => { logo.style.transform = 'scale(1.1) translateY(-4px)'; logo.style.filter = 'brightness(0) invert(1) drop-shadow(0 3px 10px rgba(0,0,0,0.55))'; });
     logo.addEventListener('mouseleave', () => { logo.style.transform = 'scale(1)'; logo.style.filter = ''; });
   });
 })();
@@ -3173,6 +3391,75 @@ function toggleLang() {
         showStep(0);
         if (ctaEl) ctaEl.classList.add('visible');
     }
+})();
+</script>
+
+<script>
+// ===== Smart hero video loader =====
+// 1) Poster is already painted (preloaded, CSS background) -> no blank hero.
+// 2) The video file is only requested AFTER the page has loaded and the browser is idle,
+//    so text, fonts and photos get the bandwidth first.
+// 3) Phones get a smaller file; Data Saver / 2G / reduced-motion keep the poster only.
+// 4) Fades in only once it is really playing; pauses off-screen and in background tabs.
+(function () {
+  const wrap = document.getElementById('heroVideo');
+  const hero = document.querySelector('.hero');
+  const v = wrap && wrap.querySelector('video');
+  if (!v || !hero) return;
+
+  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  const type = (conn && conn.effectiveType) || '';
+  const saver = !!(conn && conn.saveData);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (saver || reduce || /(^|-)2g$/.test(type)) { const l = document.getElementById('heroVload'); if (l) l.remove(); return; }   // poster only, no loader
+
+  v.muted = true; v.defaultMuted = true; v.playsInline = true;
+
+  // loading indicator: shown from page open until the video is really playing
+  const vl = document.getElementById('heroVload'), vFill = document.getElementById('heroVloadFill'), vPct = document.getElementById('heroVloadPct');
+  const loadOn = () => vl && vl.classList.add('on');
+  const loadOff = () => vl && vl.classList.remove('on');
+  loadOn();
+  function progress() {
+    if (!vl || !v.duration || !v.buffered.length) return;
+    const p = Math.min(100, Math.round(v.buffered.end(v.buffered.length - 1) / v.duration * 100));
+    vl.classList.add('known'); vl.style.setProperty('--p', p + '%'); if (vPct) vPct.textContent = p + '%';
+  }
+  v.addEventListener('progress', progress);
+  v.addEventListener('loadedmetadata', progress);
+  v.addEventListener('error', loadOff);
+  v.addEventListener('stalled', loadOn);
+  v.addEventListener('waiting', loadOn);   // re-appears if playback stalls later
+
+  let started = false, inView = true;
+  function start() {
+    if (started) return;
+    const mobile = window.matchMedia('(max-width: 900px)').matches;
+    const src = (mobile && v.dataset.srcMobile) ? v.dataset.srcMobile : v.dataset.src;
+    if (!src) return;
+    started = true;
+    v.addEventListener('playing', () => { wrap.classList.add('is-playing'); loadOff(); });
+    v.src = src;
+    v.load();
+    const p = v.play();
+    if (p && p.catch) p.catch(loadOff);   // blocked (e.g. iOS Low Power Mode) -> poster stays, no spinner
+  }
+
+  const idle = window.requestIdleCallback || (cb => setTimeout(cb, 400));
+  const kick = () => idle(start, { timeout: 2500 });
+  if (document.readyState === 'complete') kick();
+  else window.addEventListener('load', kick, { once: true });
+
+  new IntersectionObserver(([e]) => {
+    inView = e.isIntersecting;
+    if (!started) return;
+    if (inView && !document.hidden) v.play().catch(() => {}); else v.pause();
+  }, { threshold: 0.05 }).observe(hero);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!started) return;
+    if (document.hidden) v.pause(); else if (inView) v.play().catch(() => {});
+  });
 })();
 </script>
 
